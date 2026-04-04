@@ -501,6 +501,8 @@ def fibonacci(n: int) -> int:
 
 = Gauss-Jordan Elimination
 
+== 介绍
+
 高斯-约旦消元法（Gauss-Jordan Elimination）是一种用于求解线性方程组的算法，它是高斯消元法的改进版本。该方法通过将系数矩阵化为行最简形（简化行阶梯形）来求解方程组。
 
 考虑一个线性方程组：

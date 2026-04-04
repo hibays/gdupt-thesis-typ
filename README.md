@@ -153,11 +153,13 @@
 |MEDIUM|FUNC|加入表注功能|
 |MEDIUM|FUNC|加入普通的边框表格功能|
 |MEDIUM|CONFLICT|段间距过大待改？|
-|MEDIUM|OPT|考虑解决封面个人信息右向过于突出的问题|
+|MEDIUM|OPT|解决封面个人信息右向过于突出的问题|
+|MEDIUM|IMPL|解决无法准确检测一二级标题是否紧贴的问题|
 |LOW|CONFLICT|引文的项间和项内行间距待改？|
 |LOW|OPT|考虑把公式的字体设置为与Latex相同|
 |LOW|OPT|标题太挤了待改（set block in heading）|
 |LOW|CONFLICT|页眉的冒号从全角改为半角？|
+|LOW|CONFLICT|附录的标题调整为和正文一样一二级标题紧贴时缩减一个空行？|
 |LOW|FUTURE|调整中英文字体不一样大（高）问题（FAQ）|
 |LOW|CONFLICT|优化中英文的下划线不齐平问题（FAQ）|
 
