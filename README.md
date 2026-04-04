@@ -232,7 +232,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 - [modern-sjtu-thesis](https://github.com/sjtug/modern-sjtu-thesis) - 上海交通大学 Typst 论文模板
 - [modern-nju-thesis](https://github.com/nju-lug/modern-nju-thesis) - 南京大学 Typst 论文模板
 - [Typst 中文社区](https://typst-doc-cn.github.io/) - 提供中文文档和疑难解答支持
-- [小红书毕业论文模板](https://www.xiaohongshu.com/explore/69a1792d000000002202ef79?xsec_token=AB5LjaTLAU7_mODiEvcdiDgMm1CfJG_gyJDyKjrzckKK0=&xsec_source=pc_search&source=web_search_result_notes)
+- [小红书上的毕业论文模板](https://www.xiaohongshu.com/explore/69a1792d000000002202ef79?xsec_token=AB5LjaTLAU7_mODiEvcdiDgMm1CfJG_gyJDyKjrzckKK0=&xsec_source=pc_search&source=web_search_result_notes) - 提供毕业论文格式的参考
 
 ## 📄 许可证
 
