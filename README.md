@@ -141,9 +141,11 @@
 
    ```typst
    // 在文件开头找到字体定义
-   #let TimeSimSun = ("SimSun", "宋体", "SimSun", fallback: true)
-   #let TimeSimHei = ("SimHei", "黑体", "SimHei", fallback: true)
+   #let TimeSimSun = ("Times New Roman", "SimSun")
+   #let TimeSimHei = ("Times New Roman", "SimHei")
    ```
+
+See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fonts.html)和[为什么代码块里面的中文字体显示不正常？](https://typst.dev/guide/FAQ/chinese-in-raw.html)
 
 ## 😶‍🌫️ TODO
 
