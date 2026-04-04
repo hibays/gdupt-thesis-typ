@@ -687,6 +687,6 @@ def fibonacci(n: int) -> int:
   label-name: "lilaq-scatter-example",
 )
 
-#acknowledgement-page[
+#acknowledgement-page(双面打印: false)[
   致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
 ]

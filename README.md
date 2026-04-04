@@ -152,6 +152,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 |优先级|类型|项目|
 |-|-|-|
 |HIGH|BUG|解决封面个人信息（学院）过长（>7中文字）就会导致换行和下划线错误的问题|
+|HIGH|BUG|解决使用双面打印不正确的问题|
 |MEDIUM|FUNC|加入表注功能|
 |MEDIUM|FUNC|加入普通的边框表格功能|
 |MEDIUM|CONFLICT|段间距过大待改？|

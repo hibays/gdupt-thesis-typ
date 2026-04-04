@@ -822,14 +822,13 @@
   body
 }
 #let acknowledgement-page(
-  doctype: "master",
-  twoside: false,
+  双面打印: false,
   anonymous: false,
   body,
 ) = {
   pagebreak(
     weak: true,
-    to: if twoside {
+    to: if 双面打印 {
       "odd"
     },
   )
@@ -846,7 +845,7 @@
 
   pagebreak(
     weak: true,
-    to: if twoside {
+    to: if 双面打印 {
       "odd"
     },
   )
