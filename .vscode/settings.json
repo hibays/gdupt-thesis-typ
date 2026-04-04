@@ -1,0 +1,12 @@
+{
+	"[typst]": {
+		"editor.formatOnSave": true,
+		"editor.wordWrap": "on",
+		"editor.wordWrapColumn": 80,
+	},
+	"[bibtex]": {
+		"editor.formatOnSave": true
+	},
+	"editor.allowVariableFonts": false,
+	"editor.fontLigatures": false,
+}

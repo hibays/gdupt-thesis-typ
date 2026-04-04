@@ -1,0 +1,58 @@
+# 自动处理换行符，确保跨平台一致性
+
+# 文本文件自动转换
+* text=auto
+
+# 特定文件类型明确指定为文本文件
+*.typ text
+*.txt text
+*.bib text
+*.md text
+*.json text
+*.xml text
+*.yml text
+*.yaml text
+
+# 二进制文件不进行换行符转换
+*.pdf binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.ico binary
+*.mov binary
+*.mp4 binary
+*.mp3 binary
+*.flv binary
+*.fla binary
+*.swf binary
+*.gz binary
+*.zip binary
+*.rar binary
+*.7z binary
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary
+*.pyc binary
+*.pdf binary
+*.exe binary
+*.so binary
+*.dll binary
+
+# 确保某些文件始终使用LF换行符（Linux风格）
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+
+# 确保某些文件始终使用CRLF换行符（Windows风格）
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# 确保typ文件使用LF换行符（推荐）
+*.typ text eol=lf
+
+# 确保bib文件使用LF换行符（推荐）
+*.bib text eol=lf
