@@ -45,9 +45,9 @@
   set enum(indent: 0.83em, body-indent: 0.45em)
 
   show figure: i-figured.show-figure.with(extra-prefixes: (image: "img:", algorithm: "algo:"), numbering: "1.1")
-  // 公式编号：只有公式的编号是用短横线(-)连接的
+  // 公式编号：公式的编号也用点连接
   set math.equation(numbering: (..nums) => numbering(
-    "(1-1a)",
+    "(1.1a)",
     counter(heading).get().first(),
     ..nums,
   ))

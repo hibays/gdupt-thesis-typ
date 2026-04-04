@@ -1,6 +1,6 @@
 # 广东石油化工学院毕业论文 Typst 模板
 
-一个使用 [Typst](https://typst.app/) 编写的广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式**毕业论文。注意，这是一个**非官方**模板，存在不被认可的风险。
+一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式**毕业论文，存在不被认可的风险。
 
 ## ✨ 特性
 
@@ -76,14 +76,14 @@
    typst watch thesis.typ
    ```
 
-### 方法二：使用 VS Code 实时预览（推荐）
+### 方法二：使用 VS Code 实时编辑（推荐）
 
-1. 安装 [VS Code](https://code.visualstudio.com/)
-2. 安装 [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) 扩展
-3. 打开本文件夹
-4. 选择打开 `thesis.typ` 文件
-5. 按下 tab 栏右上角的预览键打开实时预览
-6. 开始编辑，预览窗口会自动更新
+1. 安装 [VS Code](https://code.visualstudio.com/)，选择把VSCode注册到右键菜单
+2. 安装 [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) 扩展（没错！只需要安装这一个插件即可）
+3. 打开本文件夹，右键选择“在 VS Code 中打开”（即作为工作空间打开）
+4. 在 VS Code 中打开 `thesis.typ` 文件
+5. 按下 Tab 栏右上角的预览键打开实时预览
+6. 开始编辑，预览窗口会随键入实时更新
 
 ## 📁 项目结构
 
@@ -95,7 +95,7 @@
 ├── assets/             # 图片资源（校徽、题字等）
 │   ├── header.png      # 学校名手书体
 ├── figures/            # 论文图表
-│   ├── emissions-2050.png
+│   ├── fig-xxx.png    # 图表 xxx
 │   └── ...
 └── README.md           # README文件
 ```
@@ -109,7 +109,7 @@
 - ✅ **中英文摘要**：支持中英文双语摘要
 - ✅ **目录**：自动生成的目录
 - ✅ **页眉页脚**：符合学校规范的页眉页脚
-- ✅ **参考文献**：支持 BibTeX 格式引用
+- ✅ **参考文献**：支持 BibTeX 格式和文内引用，建议使用Zotero等文献管理软件
 
 ### 内容元素
 
@@ -145,6 +145,22 @@
    #let TimeSimHei = ("SimHei", "黑体", "SimHei", fallback: true)
    ```
 
+## 😶‍🌫️ TODO
+
+|优先级|类型|项目|
+|-|-|-|
+|HIGH|BUG|解决封面个人信息（学院）过长（>7中文字）就会导致换行和下划线错误的问题|
+|MEDIUM|FUNC|加入表注功能|
+|MEDIUM|FUNC|加入普通的边框表格功能|
+|MEDIUM|CONFLICT|段间距过大待改？|
+|MEDIUM|OPT|考虑解决封面个人信息右向过于突出的问题|
+|LOW|CONFLICT|引文的项间和项内行间距待改？|
+|LOW|OPT|考虑把公式的字体设置为与Latex相同|
+|LOW|OPT|标题太挤了待改（set block in heading）|
+|LOW|CONFLICT|页眉的冒号从全角改为半角？|
+|LOW|FUTURE|调整中英文字体不一样大（高）问题（FAQ）|
+|LOW|CONFLICT|优化中英文的下划线不齐平问题（FAQ）|
+
 ## 📚 学习资源
 
 ### Typst 入门
@@ -167,9 +183,17 @@
 
 **A:** 完全可以！Typst 语法类似 Markdown，非常容易上手。你只需要按照模板中的示例填写内容即可。
 
+### Q: 文科生能用这个模板吗？
+
+**A:** 当然可以！简单借助VSCode和Tinymist扩展，你可以实时预览论文效果，鼠标点击预览窗口相应文字即可定位到typ源码对应位置，无需配置复杂环境。
+
 ### Q: 为什么只有一个 thesis.typ 文件？
 
 **A:** Typst 编译速度极快，单个文件便于管理和同步。通过 VS Code 的实时预览功能，可以轻松定位和编辑内容。
+
+### Q: AI或者智能体能写Typst论文吗？
+
+**A:** 行！不过最好借助[Typst 语法作者技能](https://github.com/typst-doc-cn/tutorial/blob/main/.codex/skills/typst-grammar-authoring/SKILL.md)这个Skill，手动把他输入到Prompt或安装到Claude Code/Codex/OpenClaw等智能体中，这样可以减少点语法错误。
 
 ### Q: 如何添加参考文献？
 

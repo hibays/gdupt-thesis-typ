@@ -30,27 +30,18 @@
   // 中文摘要
   [
     摘要是论文内容的简要陈述，是一篇具有独立性和完整性的短文。摘要应包括本论文的基本研究内容、研究方法、创造性成果及其理论与实际意义。摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
-
-    摘要中应排除本学科领域已成为常识的内容;切忌把应在引言中出现的内容写入摘要;一般也不要对论文内容作诠释和评论(尤其是自我评价)。
-    摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
-    摘要结构要严谨、表达简明、语义确切。一般通用第三人称。建议采用“对......进行了研究”、“报告了....·.现状”、“进行了......调查”等记述方法标明学位论文的主题，不必使用“本文”、“作者”等作为主语
-
-    摘要是论文内容的简要陈述，是一篇具有独立性和完整性的短文。摘要应包括本论文的基本研究内容、研究方法、创造性成果及其理论与实际意义。摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
-
-    摘要中应排除本学科领域已成为常识的内容;切忌把应在引言中出现的内容写入摘要;一般也不要对论文内容作诠释和评论(尤其是自我评价)。
-    摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍
-    摘要结构要严谨、表达简明、语义确切。一般通用第三人称。建议采用“对......进行了研究”、“报告了.....现状”、“进行了......调查”等记述方法标明学位论文的主题，不必使用“本文”、“作者”等作为主语。
-
-    摘要是论文内容的简要陈述，是一篇具有独立性和完整性的短文。摘要应包括本论文的基本研究内容、研究方法、创造性成果及其理论与实际意义。摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
-
-    摘要中应排除本学科领域已成为常识的内容;切忌把应在引言中出现的内容写入摘要;一般也不要对论文内容作诠释和评论(尤其是自我评价)。
-    摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
+    摘要应有关键词，关键词数量应为3-8个。
+    摘要结构要严谨、表达简明、语义确切。一般通用第三人称。建议采用“对......进行了研究”、“报告了....·.现状”、“进行了......调查”等记述方法标明学位论文的主题，不必使用“本文”、“作者”等作为主语。
   ],
   // 英文摘要
-  [To delve into the historical significance and contemporary relevance of Guangdong's South Road Revolutionary Culture, this study—conducted as part of a course practicum on red cultural investigation—adopted a multi-method approach encompassing documentary research, field observations, and in-depth interviews. The research systematically traced the evolution of this revolutionary heritage, assessed its current preservation status and challenges, and identified critical factors affecting cultural continuity. Key findings and actionable recommendations are presented to support youth education in revolutionary history, institutional red culture programs, and broader societal dissemination efforts.],
+  [
+    An abstract is a concise statement of the content of a thesis and an independent and complete short passage. It should include the basic research content, research methods, creative achievements, as well as their theoretical and practical significance of the thesis. Formulas, charts and reference numbering should not be used in the abstract. Avoid writing the abstract as a table-of-contents-style introduction.
+    An abstract should contain keywords, with the number of keywords ranging from 3 to 8.
+    The structure of an abstract shall be rigorous, the expression concise and the semantics accurate. Generally, the third person is used. It is recommended to use descriptive phrases such as "conducted research on...", "reported the current status of...", "carried out an investigation on..." to indicate the theme of the dissertation, without using "this paper" or "the author" as the subject.
+  ],
   // 关键词
-  中文关键词: ([广东南路革命文化], [红色文化传承], [实地调研], [发展路径]),
-  英文关键词: ([Red Culture], [Red Culture], [Red Culture], [Red Culture]),
+  中文关键词: ([论文内容], [创造性成果], [实际意义], [记述方法]),
+  英文关键词: ([Thesis Content], [Creative Achievements], [Practical Significance], [Description Method]),
   尾随空页: false,
 )
 
@@ -170,6 +161,21 @@ $
     &+ nabla_k f_(i j) nabla^k f^(i j) + f^(i j) f^k [2 nabla_i R_(j k) - nabla_k R_(i j)]).
 $
 
+如果要使用LaTex数学公式的，可以借助 `mitex` 包，自动把LaTex的数学公式转换为Typst的公式：
+
+#import "@preview/mitex:0.2.6": mi, mitex
+#mitex(
+  `
+  \begin{cases}
+    a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n = b_1 \\
+    a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n = b_2 \\
+    \vdots \\
+    a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n = b_m
+  \end{cases}
+`,
+)
+上面是用 `mitex` 包表达的一个线性方程组，包也支持行内使用数学符号，如 #mi("\pi")，#mi("z = -1") 等。
+
 === 定理环境
 
 示例文件中使用 `theorion` 宏包配置了定理、引理和证明等环境。
@@ -220,40 +226,40 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
 
 === 单个图形
 
-图要有图题，研究生图题采用中英文对照，并置于图的编号之后，图的编号和图题应置于图下方的居中位置。文中必须有关于本插图的提示，如“见@img:image”、“如@img:image”等。该页空白不够排写该图整体时，则可将其后文字部分提前排写，将图移到次页。
+图要有图题，图题应置于图的编号之后，图的编号和图题应置于图下方的居中位置。文中必须有关于本插图的提示，如“见@img:image”、“如@img:image”等。该页空白不够排写该图整体时，则可将其后文字部分提前排写，将图移到次页。使用 `footnote` 函数可以添加页注。
 
 #imagex(
   image(
-    "figures/energy-distribution.png",
+    "figures/cn-iron-exp.png",
     width: 80%,
   ),
-  caption: [内热源沿径向的分布],
-  caption-en: [Energy distribution along radial],
+  caption: [2000\~2024年我国钢材出口量及增速#footnote[单位（亿吨，%）来自IFind、信达证券研发中心，下同]],
   label-name: "image",
 )
 
-本科生图题只需要中文图题，删去 `caption-en` 即可。
+也支持在图表中添加英文图题，在 `imagex` 函数参数中添加参数 `caption-en` 即可。
 
 #imagex(
   image(
-    "figures/energy-distribution.png",
+    "figures/cn-iron-exp.png",
     width: 80%,
   ),
-  caption: [内热源沿径向的分布],
+  caption: [2000\~2024年我国钢材出口量及增速],
+  caption-en: [2000\~2024 year China steel export and growth rate],
   label-name: "image2",
 )
 
 === 多个图形
 
-简单插入多个图形的例子如@img:SRR 所示。这两个水平并列放置的子图共用一个图形计数器，没有各自的子图题。
+简单插入多个图形的例子如@img:CUOP 所示。这两个水平并列放置的子图共用一个图形计数器，没有各自的子图题。
 
 #imagex(
-  image("figures/emissions-variation.png"),
-  image("figures/emissions-2050.png"),
+  image("figures/cn-oil.webp"),
+  image("figures/us-oil.webp"),
   columns: (1fr, 1fr),
-  caption: [不同情景下上海市乘用车的温室气体排放量],
-  caption-en: [Greenhouse gas emissions from passenger cars in Shanghai under different scenarios],
-  label-name: "SRR",
+  caption: [历年中美石油产量],
+  caption-en: [Historical China and US oil production],
+  label-name: "CUOP",
 )
 
 如果多个图形相互独立，并不共用一个图形计数器，那么用 `grid` 或者 `columns` 就可以，如@img:parallel1 与@img:parallel2。
@@ -261,13 +267,13 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
 #grid(
   align: bottom,
   grid.cell(imagex(
-    image("figures/emissions-variation.png"),
-    caption: [温室气体排放量随时间变化的情况],
+    image("figures/cn-oil.webp"),
+    caption: [中国石油产量],
     label-name: "parallel1",
   )),
   grid.cell(imagex(
-    image("figures/emissions-2050.png"),
-    caption: [2050 年的温室气体排放量],
+    image("figures/us-oil.webp"),
+    caption: [美国石油产量],
     label-name: "parallel2",
   )),
   columns: (1fr, 1fr),
@@ -277,17 +283,17 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
 
 #imagex(
   subimagex(
-    image("figures/emissions-variation.png"),
-    caption: [温室气体排放量随时间变化的情况],
+    image("figures/cn-oil.webp"),
+    caption: [中国石油产量],
     label-name: "test1",
   ),
   subimagex(
-    image("figures/emissions-2050.png"),
-    caption: [2050 年的温室气体排放量],
+    image("figures/us-oil.webp"),
+    caption: [美国石油产量],
     label-name: "test2",
   ),
   columns: (1fr, 1fr),
-  caption: [不同情景下上海市乘用车的温室气体排放量],
+  caption: [历年中美石油产量],
   label-name: "subfigures",
 )
 
@@ -295,21 +301,21 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
 
 #imagex(
   subimagex(
-    image("figures/emissions-variation.png"),
-    caption: [温室气体排放量随时间变化的情况],
-    caption-en: [Greenhouse gas emissions over time],
+    image("figures/cn-oil.webp"),
+    caption: [中国石油产量],
+    caption-en: [China oil production],
     label-name: "test1",
   ),
   subimagex(
-    image("figures/emissions-2050.png"),
-    caption: [2050 年的温室气体排放量],
+    image("figures/us-oil.webp"),
+    caption: [美国石油产量],
     // caption-en: [Greenhouse gas emissions in 2050],
     label-name: "test2",
     alignx: center + horizon,
   ),
   columns: (1fr, 1fr),
-  caption: [不同情景下上海市乘用车的温室气体排放量],
-  caption-en: [Greenhouse gas emissions from passenger cars in Shanghai under different scenarios],
+  caption: [历年中美石油产量],
+  caption-en: [Historical China and US oil production],
   label-name: "subbifigures",
 )
 
@@ -490,45 +496,96 @@ def fibonacci(n: int) -> int:
   full: true,
 ) // full: false 表示只显示已引用的文献，不显示未引用的文献；true 表示显示所有文献
 
+// 下面开始编写附录
 #show: appendix
 
-= Maxwell Equations
+= Gauss-Jordan Elimination
 
-选择二维情况，有如下的偏振矢量：
-$
-  bf(E) & = E_z (r, theta) hat(bf(z)), \
-  bf(H) & = H_r (r, theta) hat(bf(r)) + H_theta (r, theta) hat(bold(theta)).
-$
+高斯-约旦消元法（Gauss-Jordan Elimination）是一种用于求解线性方程组的算法，它是高斯消元法的改进版本。该方法通过将系数矩阵化为行最简形（简化行阶梯形）来求解方程组。
 
-对上式求旋度：
-$
-  nabla times bf(E) & = 1 / r (partial E_z) / (partial theta) hat(bf(r)) - (partial E_z) / (partial r) hat(bold(theta)), \
-  nabla times bf(H) & = [1 / r partial / (partial r) (r H_theta) - 1 / r (partial H_r) / (partial theta)] hat(bf(z)).
-$
+考虑一个线性方程组：
+#mitex(
+  `
+  \begin{cases}
+    a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n = b_1 \\
+    a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n = b_2 \\
+    \vdots \\
+    a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n = b_m
+  \end{cases}
+`,
+)
 
-因为在柱坐标系下，$macron(macron(mu))$ 是对角的，所以 Maxwell 方程组中电场 $bf(E)$ 的旋度：
-$
-  & nabla times bf(E) = upright(i) omega bf(B), \
-  & 1 / r (partial E_z) / (partial theta) hat(bf(r)) - (partial E_z) / (partial r) hat(bold(theta)) = upright(i) omega mu_r H_r hat(bf(r)) + upright(i) omega mu_theta H_theta hat(bold(theta)).
-$
+对应的增广矩阵为：
+#mitex(
+  `
+  \begin{pmatrix}
+    a_{11} & a_{12} & \cdots & a_{1n} & | & b_1 \\
+    a_{21} & a_{22} & \cdots & a_{2n} & | & b_2 \\
+    \vdots & \vdots & \ddots & \vdots & | & \vdots \\
+    a_{m1} & a_{m2} & \cdots & a_{mn} & | & b_m
+  \end{pmatrix}
+`,
+)
 
-所以 $bf(H)$ 的各个分量可以写为：
-$
-      H_r & = 1 / (ii omega mu_r) 1 / r (partial E_z) / (partial theta), \
-  H_theta & = 1 / (ii omega mu_theta) 1 / r (partial E_z) / (partial r).
-$
+高斯-约旦消元法的基本步骤如下：
 
-同样地，在柱坐标系下，$macron(macron(epsilon.alt))$ 是对角的，所以 Maxwell 方程组中磁场 $bf(H)$ 的旋度：
-$
-  & nabla times bf(H) = -ii omega bf(D), \
-  & [1 / r partial / (partial r) (r H_theta) - 1 / r (partial H_r) / (partial theta)] hat(bf(z)) = -ii omega macron(macron(epsilon.alt)) bf(E) = -ii omega epsilon.alt_z E_z hat(bf(z)), \
-  & 1 / r partial / (partial r)(r H_theta) - 1 / r (partial H_r) / (partial theta) = -ii omega epsilon.alt_z E_z.
-$
+1. *前向消元*：将矩阵化为行阶梯形
+  - 从第一行开始，选择主元（通常选择绝对值最大的元素）
+  - 将主元所在行交换到当前行
+  - 将主元化为 1（除以主元值）
+  - 用当前行消去下方所有行的对应列元素
+2. *后向消元*：将矩阵化为行最简形
+  - 从最后一行开始，向上消去上方所有行的对应列元素
+  - 确保每个主元列中，主元为 1，其他元素为 0
 
-由此我们可以得到关于 $E_z$ 的波函数方程：
-$
-  1 / (mu_theta epsilon.alt_z) 1 / r partial / (partial r) (r (partial E_z) / (partial r)) + 1 / (mu_r epsilon.alt_z) 1 / r^2 (partial^2 E_z) / (partial theta^2) + omega^2 E_z = 0.
-$
+== 示例
+
+考虑线性方程组：
+#mitex(
+  `
+  \begin{cases}
+    2x + y - z = 8 \\
+    -3x - y + 2z = -11 \\
+    -2x + y + 2z = -3
+  \end{cases}
+`,
+)
+
+对应的增广矩阵为：
+#mitex(
+  `
+  \begin{pmatrix}
+    2 & 1 & -1 & | & 8 \\
+    -3 & -1 & 2 & | & -11 \\
+    -2 & 1 & 2 & | & -3
+  \end{pmatrix}
+`,
+)
+
+经过高斯-约旦消元后，得到行最简形：
+#mitex(
+  `
+  \begin{pmatrix}
+    1 & 0 & 0 & | & 2 \\
+    0 & 1 & 0 & | & 3 \\
+    0 & 0 & 1 & | & -1
+  \end{pmatrix}
+`,
+)
+
+因此解为：#mi("x = 2")，#mi("y = 3")，#mi("z = -1")。
+
+== 复杂度分析
+
+高斯-约旦消元法的时间复杂度为 #mi("O(n^3)")，其中 #mi("n") 是方程的数量。空间复杂度为 #mi("O(n^2)")，用于存储系数矩阵。
+
+== 应用
+
+高斯-约旦消元法广泛应用于：
+- 求解线性方程组
+- 计算矩阵的逆
+- 计算矩阵的秩
+- 求解线性规划问题
 
 = 绘图
 
