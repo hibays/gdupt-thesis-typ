@@ -169,7 +169,7 @@
 
 - [Typst 官方文档](https://typst.app/docs/)
 - [Typst 中文文档](https://typst-doc-cn.github.io/)
-- [面向 Word 用户的快速入门](https://typst-doc-cn.github.io/guide/word.html)
+- [面向 Word 用户的快速入门](https://typst.dev/guide/word.html)
 - [Typst 中文 FAQ](https://typst.dev/guide/FAQ.html)
   - [如何修改公式里的中文字体？](https://typst.dev/guide/FAQ/equation-chinese-font.html)
   - [怎么把 cal 字体变成 LaTeX 里 mathcal 默认的那种？](https://typst.dev/guide/FAQ/mathcal_font.html)
