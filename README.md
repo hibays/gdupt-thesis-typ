@@ -151,7 +151,6 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 |优先级|类型|项目|
 |-|-|-|
-|HIGH|BUG|解决封面个人信息（学院）过长（>7中文字）就会导致换行和下划线错误的问题|
 |HIGH|BUG|解决使用双面打印不正确的问题|
 |MEDIUM|FUNC|加入表注功能|
 |MEDIUM|FUNC|加入普通的边框表格功能|
@@ -163,6 +162,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 |LOW|OPT|标题太挤了待改（set block in heading）|
 |LOW|CONFLICT|页眉的冒号从全角改为半角？|
 |LOW|CONFLICT|附录的标题调整为和正文一样一二级标题紧贴时缩减一个空行？|
+|LOW|BUG|解决封面个人信息中的\d字符过多就会导致换行和下划线错误的问题|
 |LOW|FUTURE|调整中英文字体不一样大（高）问题（FAQ）|
 |LOW|CONFLICT|优化中英文的下划线不齐平问题（FAQ）|
 

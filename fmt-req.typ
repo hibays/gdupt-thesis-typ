@@ -358,11 +358,11 @@
     author: 学生,
   )
 
-  let underline-warpper = (it, extent: 0pt) => {
+  let underline-warpper = (it, extent: 0pt, offset: 0pt) => {
     if 显示下划线 {
       [
         // See: https://typst.dev/guide/FAQ/underline-misplace.html
-        #set underline(offset: .15em, stroke: .05em, evade: false, extent: extent)
+        #set underline(offset: offset + .15em, stroke: .05em, evade: false, extent: extent)
         #underline(it)
       ]
     } else {
@@ -401,34 +401,65 @@
       ]
     } else {
       let distr(width: auto, body) = {
-        block(
+        align(center + horizon)[#block(
           width: width,
-          align(center, body),
-        )
+          body,
+        )]
       }
       let cjk_len = it => {
-        wordometer_utils.extract-text(it).matches(regex("[\p{Han}]|[\p{Latin}'’.,\-]+")).len()
+        let count = wordometer_utils.extract-text(it).matches(regex("[\p{Han}]|[\p{Latin}'’.,\-]+")).len()
+        count += wordometer_utils.extract-text(it).matches(regex("[（）]+")).len() / 1.999
+        count += wordometer_utils.extract-text(it).matches(regex("\d")).len() / 1.999
+        count
+      }
+      let min = (a, b) => {
+        if a < b {
+          a
+        } else {
+          b
+        }
+      }
+      let max = (a, b) => {
+        if a > b {
+          a
+        } else {
+          b
+        }
+      }
+      let std-info = (cjk-width: 0, di-width: none, cjk-text) => {
+        if di-width == none {
+          di-width = 1em * cjk-width
+        }
+        distr(width: di-width, underline-warpper(
+          text(size: 1em * cjk-width / max(cjk_len(cjk-text), cjk-width), cjk-text),
+          extent: (cjk-width * 1em - 1em * min(cjk_len(cjk-text), cjk-width)) / 2,
+          offset: 1em * (max(cjk_len(cjk-text), cjk-width) - cjk-width) / max(cjk_len(cjk-text), cjk-width) / 2.5,
+        ))
       }
       [
         #grid(
           align: center + bottom,
           [#h(2em)学院],
-          distr(width: 7em, underline-warpper(学院, extent: (7em - 1em * cjk_len(学院)) / 2)),
+          std-info(cjk-width: 7, 学院),
           [专业],
-          distr(width: 8em, underline-warpper(专业, extent: (8em - 1em * cjk_len(专业)) / 2)),
+          std-info(cjk-width: 8, 专业),
           [班级],
-          distr(width: 2.5em, underline-warpper(班级, extent: (2em - 1em * cjk_len(班级)) / 2)),
+          std-info(cjk-width: 2, di-width: 2.5em, 班级),
 
           columns: (4.3em, 7em, 2.3em, 1fr, 2.3em, 2.5em),
         )
         #grid(
           align: center + bottom,
           [#h(2em)学生],
-          distr(width: 7em, underline-warpper(学生, extent: (7em - 1em * cjk_len(学生)) / 2)),
+          std-info(cjk-width: 7, 学生),
           [指导教师（职称）],
-          distr(width: 9em, underline-warpper(ZT, extent: (9em - 1em * (cjk_len(指导教师) + cjk_len(职称) + 2)) / 2)),
+          distr(width: 9em, underline-warpper(
+            text(size: 1em * 9 / max(cjk_len(ZT), 9), ZT),
+            extent: (9em - 1em * min(cjk_len(ZT) + 0.5, 9)) / 2,
+            offset: 1em * (max(cjk_len(ZT), 9) - 9) / max(cjk_len(ZT), 9) / 2.5,
+          )),
 
-          columns: (4.3em, 7em, 8em, 1fr),
+          columns: (4.3em, 7em, 7.3em, 1fr),
         )
 
         #grid(
