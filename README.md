@@ -1,6 +1,6 @@
 # 广东石油化工学院毕业论文 Typst 模板
 
-一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式**毕业论文，存在不被认可的风险。
+一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式** 毕业论文，但是存在不被认可的风险。
 
 ## ✨ 特性
 
@@ -10,15 +10,9 @@
 - **完整功能**：包含封面、中英文摘要、目录、图表、公式、参考文献等完整论文组件
 - **易于定制**：格式简单，便于根据个人需求调整样式
 
-## 📋 系统要求
-
-- [Typst](https://typst.app/) 最新版本
-- [VS Code](https://code.visualstudio.com/)（推荐）或其他文本编辑器
-- [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) VS Code 扩展（用于实时预览）
-
 ## 🚀 快速开始
 
-### 方法一：直接使用本模板
+### 第一步：获取模板
 
 1. **获取模板**
 
@@ -28,7 +22,60 @@
    cd gdupt-thesis-typst
    ```
 
-2. **安装 Typst**
+### 第二步：使用 VS Code （推荐）实时编辑论文
+
+1. 安装 [VS Code](https://code.visualstudio.com/)，选择把VSCode注册到右键菜单
+
+2. 安装 [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) 扩展（没错！只需要安装这一个插件即可）
+
+3. 打开本文件夹，右键选择“在 VS Code 中打开”（即作为工作空间打开）
+
+4. 在 VS Code 中打开 `thesis.typ` 文件
+   然后修改封面信息：
+
+   ```typst
+     #paper-cover(
+       [你的论文中文题目],     // 中文题目
+       [Your English Title],   // 英文题目
+       [你的学号],             // 学号
+       [你的学院],             // 学院
+       [你的专业],             // 专业
+       [你的班级],             // 班级
+       [你的姓名],             // 学生
+       [指导教师姓名],         // 指导教师
+       [指导教师职称],         // 职称
+       datetime(year: 2025, month: 11, day: 12), // 启动日期
+       datetime(year: 2025, month: 12, day: 30), // 结束日期
+       显示下划线: true,
+       仅显示下划线: false,
+       双面打印: false,
+     )
+     ```
+
+     和摘要信息：
+
+     ```typst
+     #paper-up(
+         [
+            这里是中文摘要内容。
+         ],
+         [
+            这里是英文摘要内容。
+         ],
+         // 关键词
+         中文关键词: ([关键词1], [关键词2], [关键词3], [关键词4], [关键词5]),
+         英文关键词: ([kw1], [kw2], [kw3], [kw4], [kw5]),
+         尾随空页: false,
+         )
+     ```
+
+5. 按下 Tab 栏右上角的预览键即可打开实时预览
+
+6. 开始编辑，预览窗口会随键入实时更新，并可以双向跳转
+
+### 或者：使用 Typst 编译本模板
+
+1. **安装 Typst**
    - 访问 [Typst 官网](https://typst.app/) 下载并安装
    - 或使用包管理器安装：
 
@@ -43,47 +90,15 @@
      curl -proto '=https' -tlsv1.2 -sSf https://raw.githubusercontent.com/typst/typst/main/install.sh | sh
      ```
 
-3. **编辑论文**
-   - 打开 `thesis.typ` 文件
-   - 修改封面信息（第9-24行）：
-
-     ```typst
-     #paper-cover(
-       [你的论文中文题目],      // 中文题目
-       [Your English Title],   // 英文题目
-       [你的学号],             // 学号
-       [你的学院],             // 学院
-       [你的专业],             // 专业
-       [你的班级],             // 班级
-       [你的姓名],             // 学生
-       [指导教师姓名],         // 指导教师
-       [指导教师职称],         // 职称
-       datetime(year: 2025, month: 2, day: 1), // 启动日期
-       datetime(year: 2025, month: 12, day: 31), // 结束日期
-       显示下划线: true,
-       仅显示下划线: false,
-       双面打印: false,
-     )
-     ```
-
-4. **编译论文**
+2. **编译论文**
 
    ```sh
-   # 编译为 PDF
+   # 编译生成 thesis.pdf
    typst compile thesis.typ
 
    # 或使用 watch 模式（自动重新编译）
    typst watch thesis.typ
    ```
-
-### 方法二：使用 VS Code 实时编辑（推荐）
-
-1. 安装 [VS Code](https://code.visualstudio.com/)，选择把VSCode注册到右键菜单
-2. 安装 [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) 扩展（没错！只需要安装这一个插件即可）
-3. 打开本文件夹，右键选择“在 VS Code 中打开”（即作为工作空间打开）
-4. 在 VS Code 中打开 `thesis.typ` 文件
-5. 按下 Tab 栏右上角的预览键打开实时预览
-6. 开始编辑，预览窗口会随键入实时更新
 
 ## 📁 项目结构
 
@@ -93,7 +108,7 @@
 ├── fmt-req.typ         # 格式要求和样式定义
 ├── refs.bib            # 参考文献数据库（BibTeX 格式）
 ├── assets/             # 图片资源（校徽、题字等）
-│   ├── header.png      # 学校名手书体
+│   └── header.png      # 学校名书法图片
 ├── figures/            # 论文图表
 │   ├── fig-xxx.png    # 图表 xxx
 │   └── ...
@@ -147,7 +162,7 @@
 
 See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fonts.html)和[为什么代码块里面的中文字体显示不正常？](https://typst.dev/guide/FAQ/chinese-in-raw.html)
 
-## 😶‍🌫️ TODO
+## 😶‍🌫️ TODO & Known Issues
 
 |优先级|类型|项目|
 |-|-|-|

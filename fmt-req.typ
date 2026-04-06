@@ -10,6 +10,8 @@
 // 定义应用Times New Roman的SimSun字体
 #let TimeSimSun = ("Times New Roman", "SimSun")
 #let TimeSimHei = ("Times New Roman", "SimHei")
+// 定义代码字体（等宽是等宽字体，CJK 是中文字体）
+#let CodeFont = (等宽: "DejaVu Sans Mono", CJK: "Noto Sans CJK SC")
 
 #let 字号 = (
   初号: 42pt,
@@ -125,8 +127,13 @@
   show: show-fakebold
   show: show-fakeitalic
 
+  // 设置代码字体
+  show raw: set text(font: (
+    (name: CodeFont.等宽, covers: "latin-in-cjk"),
+    CodeFont.CJK,
+  ))
   // 设置正文样式
-  set text(font: TimeSimSun, size: 字号.小四, lang: "zh") // 小四号=12pt
+  set text(font: TimeSimSun, size: 字号.小四, lang: "zh") // 宋体小四号=12pt
   set text(top-edge: "cap-height", bottom-edge: "baseline")
   set par(first-line-indent: (amount: 2em, all: true)) // 段落首行缩进
   // 行距：全文固定值20磅，按照Word的行距设置相当于Typst的两倍，所以是10pt
