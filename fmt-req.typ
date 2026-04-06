@@ -46,6 +46,7 @@
   set enum(numbering: "a.1.i)")
   set enum(indent: 0.83em, body-indent: 0.45em)
 
+  // 如果希望单数字则自己改 i-figured 的源码
   show figure: i-figured.show-figure.with(extra-prefixes: (image: "img:", algorithm: "algo:"), numbering: "1.1")
   // 公式编号：公式的编号也用点连接
   set math.equation(numbering: (..nums) => numbering(
@@ -132,12 +133,15 @@
     (name: CodeFont.等宽, covers: "latin-in-cjk"),
     CodeFont.CJK,
   ))
-  // 设置正文样式
+  // 设置正文字体
   set text(font: TimeSimSun, size: 字号.小四, lang: "zh") // 宋体小四号=12pt
   set text(top-edge: "cap-height", bottom-edge: "baseline")
+  // 设置正文样式
   set par(first-line-indent: (amount: 2em, all: true)) // 段落首行缩进
-  // 行距：全文固定值20磅，按照Word的行距设置相当于Typst的两倍，所以是10pt
-  // 文档：https://typst.app/docs/reference/model/par/#leading
+  // 行距：全文固定值20磅=段间距
+  // Word的行距在Typst相当于 leading - text.size = 20-12 = 8pt
+  // 不够好看所以设置为 10pt
+  // 文档：https://typst.app/docs/reference/model/par/#leading 和 中文FAQ
   set par(leading: 10pt)
   set par(spacing: 20pt) // 段距：没说，默认20磅
   set par(justify: true) // 设置段落两端对齐
