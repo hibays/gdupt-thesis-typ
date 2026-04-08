@@ -133,17 +133,19 @@
     (name: CodeFont.等宽, covers: "latin-in-cjk"),
     CodeFont.CJK,
   ))
-  // 设置正文字体
-  set text(font: TimeSimSun, size: 字号.小四, lang: "zh") // 宋体小四号=12pt
-  set text(top-edge: "cap-height", bottom-edge: "baseline")
+  // 设置正文字体（宋体小四号/12pt）
+  set text(font: TimeSimSun, size: 字号.小四, lang: "zh")
+  // set text(top-edge: "cap-height", bottom-edge: "baseline") // 西文习惯（默认）
+  //set text(top-edge: "ascender", bottom-edge: "descender") // 中文习惯
   // 设置正文样式
   set par(first-line-indent: (amount: 2em, all: true)) // 段落首行缩进
   // 行距：全文固定值20磅=段间距
   // Word的行距在Typst相当于 leading - text.size = 20-12 = 8pt
   // 不够好看所以设置为 10pt
   // 文档：https://typst.app/docs/reference/model/par/#leading 和 中文FAQ
-  set par(leading: 10pt)
-  set par(spacing: 20pt) // 段距：没说，默认20磅
+  set par(leading: 20pt - 0.9em) // 行距
+  // Known: 修改段距过小会导致sjtu的表注错位
+  set par(spacing: 20pt - 0.2em) // 段距
   set par(justify: true) // 设置段落两端对齐
 
   // 设置标题自动编号格式（for cover part）
@@ -230,8 +232,9 @@
   let sign_up_case(it) = {
     align(center)[
       #set text(font: TimeSimSun, size: 字号.小五)
+      // 设置距离
+      #set par(spacing: 3pt)
       #it
-      #v(-1.8em) // 缩一下位置
       #line(length: 100%, stroke: 1.5pt) // 画线
       #v(1em) // 空一行
     ]
@@ -398,6 +401,9 @@
   // 放入个人信息
   align(left + bottom)[
     #set text(size: 字号.小三, weight: "bold", font: TimeSimSun) // 小三号宋体加黑
+    // 设置行距为Word的36磅
+    #set par(leading: 36pt - 1em) // 行距
+    #set par(spacing: 36pt - 1em) // 段距
 
     #if 仅显示下划线 {
       [
@@ -511,7 +517,8 @@
         )
       ]
     }
-
+  ]
+  [
     // fit
     #set text(size: 字号.五号)
     \

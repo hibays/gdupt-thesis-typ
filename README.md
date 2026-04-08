@@ -167,9 +167,9 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 |优先级|类型|项目|
 |-|-|-|
 |HIGH|BUG|解决使用双面打印不正确的问题|
-|MEDIUM|FUNC|加入表注功能|
+|MEDIUM|FUNC|加入图注功能|
 |MEDIUM|FUNC|加入普通的边框表格功能|
-|MEDIUM|CONFLICT|段间距过大待改？|
+|MEDIUM|CONFLICT|段间距过大待改（修改段距过小会导致sjtu的表注错位）|
 |MEDIUM|OPT|解决封面个人信息右向过于突出的问题|
 |MEDIUM|IMPL|解决无法准确检测一二级标题是否紧贴的问题|
 |LOW|CONFLICT|引文的项间和项内行间距待改？|
@@ -187,7 +187,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 - [Typst 官方文档](https://typst.app/docs/)
 - [Typst 中文文档](https://typst-doc-cn.github.io/)
-- [面向 Word 用户的快速入门](https://typst.dev/guide/word.html)
+- [面向 Word 用户的快速入门](https://typst.dev/guide/word.html)（推荐看这个）
 - [Typst 中文 FAQ](https://typst.dev/guide/FAQ.html)
   - [如何修改公式里的中文字体？](https://typst.dev/guide/FAQ/equation-chinese-font.html)
   - [怎么把 cal 字体变成 LaTeX 里 mathcal 默认的那种？](https://typst.dev/guide/FAQ/mathcal_font.html)
