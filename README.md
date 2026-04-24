@@ -2,23 +2,15 @@
 
 一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式** 毕业论文，但是存在不被认可的风险。
 
-<div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; overflow: hidden; border-radius: 4px;">
-  <div style="display: flex; transition: transform 0.5s ease-in-out; animation: slide 6s infinite;">
-    <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; flex-shrink: 0;" />
-    <img src="docs/abstract.webp" alt="abstract" style="width: 100%; flex-shrink: 0;" />
-    <img src="docs/outline_and_1c.webp" alt="outline_and_1c" style="width: 100%; flex-shrink: 0;" />
-  </div>
-  <style>
-    @keyframes slide {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(0); }
-      33% { transform: translateX(-100%); }
-      58% { transform: translateX(-100%); }
-      66% { transform: translateX(-200%); }
-      91% { transform: translateX(-200%); }
-      100% { transform: translateX(0); }
-    }
-  </style>
+<div style="width: 100%; max-width: 800px; margin: 0 auto;">
+  <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; height: auto; border-radius: 3px;" />
+  <details style="margin-top: 10px;">
+    <summary style="cursor: pointer; font-weight: bold;">查看更多图片</summary>
+    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+    <img src="docs/abstract.webp" alt="abstract" style="width: 100%; height: auto; border-radius: 3px;" />
+      <img src="docs/outline_and_1c.webp" alt="outline_and_1c" style="width: 100%; height: auto; border-radius: 3px;" />
+    </div>
+  </details>
 </div>
 
 ## ✨ 特性
