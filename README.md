@@ -2,9 +2,28 @@
 
 一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式** 毕业论文，但是存在不被认可的风险。
 
+<div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; overflow: hidden; border-radius: 4px;">
+  <div style="display: flex; transition: transform 0.5s ease-in-out; animation: slide 12s infinite;">
+    <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; flex-shrink: 0;" />
+    <img src="docs/abstract.webp" alt="abstract" style="width: 100%; flex-shrink: 0;" />
+    <img src="docs/outline_and_1c.webp" alt="outline_and_1c" style="width: 100%; flex-shrink: 0;" />
+  </div>
+  <style>
+    @keyframes slide {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(0); }
+      33% { transform: translateX(-100%); }
+      58% { transform: translateX(-100%); }
+      66% { transform: translateX(-200%); }
+      91% { transform: translateX(-200%); }
+      100% { transform: translateX(0); }
+    }
+  </style>
+</div>
+
 ## ✨ 特性
 
-- **符合学校规范**：参考 [官方 Word 文档](https://jwb.gdupt.edu.cn/info/1057/10126.htm) 开发，基本符合学校格式要求
+- **符合学校规范**：参考 [官方 Word 文档](https://jwb.gdupt.edu.cn/info/1057/10126.htm) 开发，高度对齐学校格式要求
 - **现代化排版**：使用 Typst 现代排版系统，编译速度快，语法简洁
 - **实时预览**：支持 VS Code 实时编辑和预览
 - **完整功能**：包含封面、中英文摘要、目录、图表、公式、参考文献等完整论文组件
@@ -73,7 +92,7 @@
 
 6. 开始编辑，预览窗口会随键入实时更新，并可以双向跳转
 
-### 或者：使用 Typst 编译本模板
+### 或者：使用 Typst CLI 编译本模板
 
 1. **安装 Typst**
    - 访问 [Typst 官网](https://typst.app/) 下载并安装
