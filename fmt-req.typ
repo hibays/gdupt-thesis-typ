@@ -134,16 +134,16 @@
     CodeFont.CJK,
   ))
   // 设置正文字体（宋体小四号/12pt）
-  set text(font: TimeSimSun, size: 字号.小四, lang: "zh")
+  set text(font: TimeSimSun, size: 字号.小四, lang: "zh", region: "cn")
   // set text(top-edge: "cap-height", bottom-edge: "baseline") // 西文习惯（默认）
-  //set text(top-edge: "ascender", bottom-edge: "descender") // 中文习惯
+  //set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
   // 设置正文样式
   set par(first-line-indent: (amount: 2em, all: true)) // 段落首行缩进
   // 行距：全文固定值20磅=段间距
   // Word的行距在Typst相当于 leading - text.size = 20-12 = 8pt
   // 不够好看所以设置为 10pt
   // 文档：https://typst.app/docs/reference/model/par/#leading 和 中文FAQ
-  set par(leading: 20pt - 0.9em) // 行距
+  set par(leading: 20pt - 0.7em) // 行距
   // Known: 修改段距过小会导致sjtu的表注错位
   set par(spacing: 20pt - 0.2em) // 段距
   set par(justify: true) // 设置段落两端对齐
@@ -232,10 +232,10 @@
   let sign_up_case(it) = {
     align(center)[
       #set text(font: TimeSimSun, size: 字号.小五)
-      // 设置距离
-      #set par(spacing: 3pt)
+      #set par(spacing: 3pt)  // 设置距离
       #it
-      #line(length: 100%, stroke: 1.5pt) // 画线
+      #line(length: 100%, stroke: 0.5pt) // 画线
+      #line(length: 100%, stroke: 0.5pt, start: (0pt, -2pt)) // 画线
       #v(1em) // 空一行
     ]
   }
@@ -286,6 +286,7 @@
   )
 
   // 设置正文标题的 supplement 和 numbering
+  // 如果想要第一章的话改成第{1:一}章
   set heading(
     numbering: numbly(
       "第{1}章",
@@ -544,8 +545,9 @@
     #set text(size: 字号.三号, lang: "zh", font: TimeSimSun) // 三号宋体
     本人郑重承诺：《#中文题目》毕业论文（设计）的内容真实、可靠，是本人在 #指导教师 的指导下，独立进行研究所完成。毕业论文（设计）中引用他人已经发表或未发表的成果、数据、观点等，均已明确注明出处，如果存在弄虚作假、抄袭、剽窃的情况，本人愿承担全部责任。
     #v(4em)
-    #align(right)[学生签名：#h(5em)]
-    #align(right)[年#h(1.5em)月#h(1.5em)日#h(2.5em)]
+    // 签和年对齐
+    #align(right)[学生签名：#h(7em)]
+    #align(right)[年#h(2em)月#h(2em)日#h(3em)]
   ]
 
   if 双面打印 {
@@ -560,7 +562,7 @@
   counter(page).update(1)
 
   [
-    #heading(level: 1)[摘要]
+    #heading(level: 1)[摘#h(1em)要]
 
     #中文摘要 \
     \
