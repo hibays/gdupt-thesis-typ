@@ -3,7 +3,7 @@
 一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式** 毕业论文，但是存在不被认可的风险。
 
 <div style="position: relative; width: 100%; max-width: 800px; margin: 0 auto; overflow: hidden; border-radius: 4px;">
-  <div style="display: flex; transition: transform 0.5s ease-in-out; animation: slide 12s infinite;">
+  <div style="display: flex; transition: transform 0.5s ease-in-out; animation: slide 6s infinite;">
     <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; flex-shrink: 0;" />
     <img src="docs/abstract.webp" alt="abstract" style="width: 100%; flex-shrink: 0;" />
     <img src="docs/outline_and_1c.webp" alt="outline_and_1c" style="width: 100%; flex-shrink: 0;" />
@@ -254,7 +254,9 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 ### Q: 编译时出现字体错误怎么办？
 
-**A:** 确保系统中安装了所需的中文字体（如宋体、黑体），或修改 `fmt-req.typ` 中的字体配置。
+**A:** 确保系统中安装了所需的中文字体（宋体、黑体、Times New Roman），或修改 `fmt-req.typ` 中的字体配置。
+
+**PS:** 如果你使用WSL2，可以参考[这个](https://blog.csdn.net/oZuoZuoZuoShi/article/details/118977701)直接使用宿主机的字体：`sudo ln -s /mnt/c/Windows/Fonts /usr/share/fonts/font && sudo fc-cache -fv`
 
 ## 🤝 贡献
 
