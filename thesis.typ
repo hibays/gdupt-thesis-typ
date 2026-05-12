@@ -10,7 +10,7 @@
   [毕业论文（设计）], // 大标题
   [中文题目], // 中文题目
   [Title name in English], // 英文题目
-  [114514666666], // 学号
+  [11451466666], // 学号
   [马克思学院], // 学院
   [化学工程与工艺（卓越班）], // 专业
   [12班], // 班级
@@ -354,6 +354,26 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
   label-name: "standard-table",
 )
 
+通过更改表格的样式设置，可以将其显示为边框表格，如@tbl:normal-table 所示。（注意：边框表格跨页时，续表字样会被边框框选。故应传入参数 `breakable: false`，取消其续表功能。）
+
+#tablex(
+  ..for i in range(3) {
+    ([250], [88], [5900], [1.65])
+  },
+  header: (
+    [感应频率 #linebreak() (kHz)],
+    [感应发生器功率 #linebreak() (%×80kW)],
+    [工件移动速度 #linebreak() (mm/min)],
+    [感应圈与零件间隙 #linebreak() (mm)],
+  ),
+  stroke: 0.5pt,
+  columns: 4,
+  caption: [高频感应加热的基本参数],
+  caption-en: [XXXXXXX],
+  label-name: "normal-table",
+  breakable: false,
+)
+
 === 复杂表格
 
 我们经常会在表格下方标注数据来源，或者对表格里面的条目进行解释。可以用 `table-note` 在表格中添加表注，如@tbl:footnote-table 所示。
@@ -411,10 +431,10 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
   label-name: "footnote-table",
 )
 
-如某个表需要转页接排，`tablex` 自动实现了续表功能。接排时表题省略，表头应重复书写，并在右上方写“续表 xx”，如@tbl:long-table 所示。（注意：当表格跨页时，脚注不能添加在表头中，会导致重复标注，此时应传入参数 `breakable: false`，取消续表功能。）
+如某个表需要转页接排，`tablex` 自动实现了续表功能。接排时表题省略，表头应重复书写，并上书“续表 xx”，如@tbl:long-table 所示。（注意：当表格跨页时，脚注不能添加在表头中，会导致重复标注，此时应传入参数 `breakable: false`，取消续表功能。）
 
 #tablex(
-  ..for i in range(15) {
+  ..for i in range(18) {
     ([250], [88], [5900], [1.65])
   },
   header: (

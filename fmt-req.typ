@@ -137,12 +137,6 @@
     number-align: center + bottom, // 底端居中
     header-ascent: 15%,
     footer-descent: 15%,
-    footer: context {
-      // 设置页脚（页码）字体大小
-      set align(center)
-      set text(size: 字号.五号)
-      counter(page).display()
-    },
   )
 
   // 显示中文字体的伪粗体和伪斜体
@@ -150,12 +144,20 @@
   show: show-fakeitalic
 
   // 设置代码字体
-  show raw: set text(font: (
-    (name: CodeFont.等宽, covers: "latin-in-cjk"),
-    CodeFont.CJK,
-  ))
+  show raw: set text(
+    font: (
+      (name: CodeFont.等宽, covers: "latin-in-cjk"),
+      CodeFont.CJK,
+    ),
+    size: 字号.五号,
+  )
   // 设置正文字体（宋体小四号/12pt）
-  set text(font: TimeSimSun, size: 字号.小四, lang: "zh", region: "cn")
+  set text(
+    font: TimeSimSun,
+    size: 字号.小四,
+    lang: "zh",
+    region: "cn",
+  )
   // set text(top-edge: "cap-height", bottom-edge: "baseline") // 西文习惯（默认）
   //set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
   // 设置正文样式
@@ -178,7 +180,7 @@
     // 正文第一级标题（章节）
     // 正文第一级标题用三号粗黑体，章序号采用阿拉伯数字，居中上下空一行
     set align(center)
-    set block(below: 2em)
+    set block(above: 2em, below: 2em)
     set text(font: TimeSimHei, size: 字号.三号, weight: "bold")
     pagebreak(weak: true)
     v(1.3em)
@@ -188,37 +190,23 @@
   show heading.where(level: 2): it => {
     // 正文第二级标题
     // 小三黑体，靠左上下空一行
+    set block(above: 2em, below: 2em)
     set text(font: TimeSimHei, size: 字号.小三, weight: "regular")
-
-    // 在当前页检查上一个元素是否是一级标题，如果是则不添加垂直间距
-    let elems = query(selector(heading).before(here())).filter(it => (
-      it.location().page() == here().page()
-    ))
-    // 如果有(1, oo)个heading，说明当前页可能有章节标题，query第一个heading是当前页的章节标题，最后一个是it自己，所以返回倒数第二个项目
-    let elem = none
-    if elems.len() > 1 {
-      elem = elems.at(-2)
-    }
-    // 如果上一个元素是一级标题，不添加垂直间距
-    if elem != none and elem.func() == heading and elem.level == 1 {} else {
-      v(1em)
-    }
     it
-    v(1em)
   }
 
   show heading.where(level: 3): it => {
     // 正文第三级标题
     // 四号黑体，靠左本身不空行
+    set block(above: 0.9em, below: 0.9em)
     set text(font: TimeSimHei, size: 字号.四号, weight: "regular")
-    // TRICK: 如果不缩一下换段会导致空隔
-    v(-字号.四号 * 1.65 + 字号.小三)
     it
   }
 
   show heading.where(level: 4): it => {
     // 正文第四级标题
     // 文件没有规定，手动设置一个：小四号黑体，靠左本身不空行
+    set block(above: 0.9em, below: 0.9em)
     set text(font: TimeSimHei, size: 字号.小四, weight: "regular")
     it
   }
@@ -243,6 +231,12 @@
     margin: (left: 2.8cm, right: 2.2cm, top: 2.8cm, bottom: 2.2cm),
     // 使用罗马数字编号页码
     numbering: "I",
+    footer: context {
+      // 设置页脚（页码）字体大小
+      set align(center)
+      set text(size: 字号.五号)
+      counter(page).display()
+    },
   )
   it
 }
@@ -251,11 +245,13 @@
   // pass3-4 之后是正文
   // pass3仅设置页眉样式
   // 页眉字体中文用小五号宋体，英文用Times New Roman，上加0.5磅双线。
+  // 奇数页：章名，偶数页：广东石油化工学院毕业论文（设计）：题目名。居中；
   let sign_up_case(it) = {
     align(center)[
       #set text(font: TimeSimSun, size: 字号.小五)
       #set par(spacing: 3pt)  // 设置距离
       #it
+      #v(1pt)
       #line(length: 100%, stroke: 0.5pt) // 画线
       #line(length: 100%, stroke: 0.5pt, start: (0pt, -2pt)) // 画线
       #v(1em) // 空一行
@@ -298,7 +294,20 @@
         headingNumber = elem-num-handler(elems.last(), counter(heading).get().first() - 1)
       }
 
-      sign_up_case(if headingTitle == none { [#headingNumber] } else { [#headingNumber #headingTitle] })
+      let show_case = if headingTitle == none { [#headingNumber] } else { [#headingNumber #headingTitle] }
+
+      let ex_show_case = wordometer_utils.extract-text(show_case)
+      // 去掉中间的水平间距
+      // 因为extract-text后中间会有空格所以要replace掉
+      if regex("(目.*?录)|(摘.*?要)|(致.*?谢)") in ex_show_case {
+        show_case = ex_show_case.replace(" ", "")
+      }
+      // 在附录X[]名称之间加入中英文空隔
+      if regex("(附录[\w].*)") in ex_show_case {
+        show_case = ex_show_case
+      }
+
+      sign_up_case(show_case)
     } else {
       let chinese-title = state("chinese-title").get()
       let big-title = state("big-title").get()
@@ -354,7 +363,7 @@
   仅显示下划线: false,
 ) = {
   set align(left)
-  text(size: 字号.小五)[#h(49em * 0.5)]
+  text(size: 字号.小五)[#h(49em * 0.53)]
   text(size: 字号.四号)[
     #if 仅显示下划线 {
       [学号：*#underline([\u{20}] * 12 * 2)*]
@@ -367,7 +376,7 @@
   // 放入学校的 title 图片
   align(center)[
     #set par(spacing: 0pt, leading: 0pt)
-    #image("assets/header.png", height: 1.83cm, width: 9.72cm)
+    #image("assets/header.png", height: 1.83cm, width: 9.69cm)
 
     // 手搓的调整距离
     #v(1.85em)
@@ -411,6 +420,7 @@
     #set text(size: 字号.小二, weight: "bold", font: TimeSimHei, tracking: 2pt) // 小二号黑体加黑居中
     #underline-warpper(中文题目)
     #v(字号.五号)
+    #text(size: 字号.五号, linebreak())
     #underline-warpper(英文题目)
   ]
 
@@ -477,7 +487,9 @@
           offset: 1em * (max(cjk_len(cjk-text), cjk-width) - cjk-width) / max(cjk_len(cjk-text), cjk-width) / 2.5,
         ))
       }
-      [
+      place(left + bottom, dx: -8pt, dy: -字号.五号 * 4.5)[
+        #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
+
         #grid(
           align: center + bottom,
           [#h(2em)学院],
@@ -541,12 +553,6 @@
         )
       ]
     }
-  ]
-  [
-    // fit
-    #set text(size: 字号.五号)
-    \
-    \
   ]
 
   if 双面打印 {
@@ -664,15 +670,15 @@
   )
 
   show bibliography: set text(font: TimeSimSun, size: 字号.五号) // 五号宋体
-  show bibliography: set par(leading: 1em)
-  show bibliography: set par(spacing: 1.5em)
 
-  bilingual-bibliography(
-    bibliography: bibfunc,
-    title: [参考文献], // 三号黑体 = heading.level == 1
-    full: full,
-  )
-
+  {
+    set heading(supplement: [引文])
+    bilingual-bibliography(
+      bibliography: bibfunc,
+      title: [参考文献], // 三号黑体 = heading.level == 1
+      full: full,
+    )
+  }
   pagebreak(
     weak: true,
     to: if 双面打印 {
@@ -706,85 +712,10 @@
   appendix: false,
   body,
 ) = {
+  // 除一级标题外不显示于目录，样式继承自正文heading样式
   show heading.where(level: 2): set heading(outlined: if appendix { false } else { true })
   show heading.where(level: 3): set heading(outlined: if appendix { false } else { true })
   show heading.where(level: 4): set heading(outlined: if appendix { false } else { true })
-
-  show heading.where(level: 2): it => {
-    set text(
-      // 数字用 Times Roman，中文用黑体，均为四号字，加粗
-      font: TimeSimHei,
-      weight: "bold",
-      size: 字号.四号,
-    )
-    set par(
-      // 无缩进，行距18磅
-      first-line-indent: 0em,
-      leading: 18pt,
-    )
-
-    if enable-avoid-orphan-headings {
-      let threshold = auto-section-pagebreak-space
-      block(breakable: false, height: threshold)
-      v(-threshold, weak: true)
-    }
-
-    //前后间距分别为24磅和6磅
-    v(12pt)
-    counter(heading).display() + h(1em) + it.body
-    v(6pt)
-  }
-
-  // 设置三级标题
-  show heading.where(level: 3): it => {
-    set text(
-      // 数字用 Times Roman，中文用黑体，均为小四号字，加粗
-      font: TimeSimHei,
-      weight: "bold",
-      size: 字号.小四,
-    )
-    set par(
-      // 无缩进，行距16磅
-      first-line-indent: 0em,
-      leading: 16pt,
-    )
-
-    if enable-avoid-orphan-headings {
-      let threshold = auto-section-pagebreak-space
-      block(breakable: false, height: threshold)
-      v(-threshold, weak: true)
-    }
-
-    //前后间距分别为12磅和6磅
-    v(9pt)
-    counter(heading).display() + h(1em) + it.body
-    v(6pt)
-  }
-
-  // 设置四级标题
-  show heading.where(level: 4): it => {
-    set text(
-      // 小四号字，不加粗，字体与正文一致
-      weight: "regular",
-      size: 字号.小四,
-    )
-    set par(
-      // 无缩进，行距16磅
-      first-line-indent: 0em,
-      leading: 16pt,
-    )
-
-    if enable-avoid-orphan-headings {
-      let threshold = auto-section-pagebreak-space
-      block(breakable: false, height: threshold)
-      v(-threshold, weak: true)
-    }
-
-    //前后间距分别为6磅和6磅
-    v(6pt)
-    counter(heading).display() + h(1em) + it.body
-    v(6pt)
-  }
 
   body
 }

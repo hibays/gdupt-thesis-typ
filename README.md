@@ -1,6 +1,6 @@
 # 广东石油化工学院毕业论文 Typst 模板
 
-一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式** 毕业论文，但是存在不被认可的风险。
+一个使用 [Typst](https://typst.app/) 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的 **PDF 格式** 毕业论文。
 
 <div style="width: 100%; max-width: 800px; margin: 0 auto;">
   <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; height: auto; border-radius: 3px;" />
@@ -29,7 +29,7 @@
 
    ```bash
    # 克隆本仓库
-   git clone https://github.com/your-username/gdupt-thesis-typst.git
+   git clone https://github.com/hibays/gdupt-thesis-typst.git
    cd gdupt-thesis-typst
    ```
 
@@ -37,7 +37,7 @@
 
 1. 安装 [VS Code](https://code.visualstudio.com/)，选择把VSCode注册到右键菜单
 
-2. 安装 [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) 扩展（没错！只需要安装这一个插件即可）
+2. 安装 [Tinymist Typst](https://marketplace.visualstudio.com/items?itemName=myriad-dreamin.tinymist) 扩展（没错！只需点点鼠标简简单单安装一个插件！）
 
 3. 打开本文件夹，右键选择“在 VS Code 中打开”（即作为工作空间打开）
 
@@ -178,9 +178,8 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 |优先级|类型|项目|
 |-|-|-|
-|HIGH|FUNC|自动导出双面打印功能|
-|MEDIUM|FUNC|普通边框表格功能|
-|MEDIUM|OPT|封面个人信息右向过于突出影响美观|
+|HIGH|FUNC|双面打印模式|
+|LOW|FUNC|边框表格续表|
 
 ## 📚 学习资源
 
