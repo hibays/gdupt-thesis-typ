@@ -179,6 +179,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 |优先级|类型|项目|
 |-|-|-|
 |HIGH|FUNC|双面打印模式|
+|HIGH|FUNC|送往盲审模式|
 |LOW|FUNC|边框表格续表|
 
 ## 📚 学习资源
