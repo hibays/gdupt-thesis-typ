@@ -1,12 +1,13 @@
 #import "fmt-req.typ": (
-  acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, imagex, paper-cover,
-  paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
+  acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
+  paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
 )
 
 // 在 pass1 之后开始编写论文封面和前面的内容
 #show: fmt-pass1
 
 #paper-cover(
+  [毕业论文（设计）], // 大标题
   [中文题目], // 中文题目
   [Title name in English], // 英文题目
   [114514666666], // 学号
@@ -23,8 +24,9 @@
   双面打印: false,
 )
 
-// 在 pass12 之后开始编写论文摘要
+// 在 pass123 之后开始编写论文摘要
 #show: fmt-pass2
+#show: fmt-pass3 // 页眉
 
 #paper-up(
   // 中文摘要
@@ -45,8 +47,9 @@
   尾随空页: false,
 )
 
-// 在 pass123 之后开始编写论文正文
-#show: fmt-pass3
+// 在 pass1234 之后开始编写论文正文
+
+#show: fmt-pass4
 
 = 绪论 <chp:intro>
 

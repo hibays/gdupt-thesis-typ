@@ -4,12 +4,13 @@
   theorem,
 )
 #import "@preview/numbly:0.1.0": numbly
-#import "@preview/cuti:0.4.0": show-fakebold, show-fakeitalic
+#import "@preview/cuti:0.4.0": show-cn-fakebold, show-cn-fakeitalic, show-fakebold, show-fakeitalic
 #import "@preview/wordometer:0.1.5": utils as wordometer_utils
 
 // 定义应用Times New Roman的SimSun字体
 #let TimeSimSun = ("Times New Roman", "SimSun")
 #let TimeSimHei = ("Times New Roman", "SimHei")
+#let TimeFanSun = ("Times New Roman", "FangSong") // 仿宋_GB2312
 // 定义代码字体（等宽是等宽字体，CJK 是中文字体）
 #let CodeFont = (等宽: "DejaVu Sans Mono", CJK: "Noto Sans CJK SC")
 
@@ -47,6 +48,14 @@
   set enum(indent: 0.83em, body-indent: 0.45em)
 
   // 如果希望单数字则自己改 i-figured 的源码
+  show heading: i-figured.reset-counters.with(extra-kinds: (
+    "image",
+    "image-en",
+    "table",
+    "table-en",
+    "algorithm",
+    "algorithm-en",
+  ))
   show figure: i-figured.show-figure.with(extra-prefixes: (image: "img:", algorithm: "algo:"), numbering: "1.1")
   // 公式编号：公式的编号也用点连接
   set math.equation(numbering: (..nums) => numbering(
@@ -92,19 +101,23 @@
   }
 
   set figure.caption(separator: [#h(1em)])
+  // 图题及图中文字用5号宋体
   show figure.caption: it => {
-    set text(size: 12pt, weight: "bold")
+    set text(size: 字号.五号, weight: "bold")
     it
   }
   show figure.where(kind: "table"): set figure.caption(position: bottom)
   show figure.where(kind: "table-en"): set figure.caption(position: bottom)
   show figure.where(kind: "algorithm"): set figure.caption(position: bottom)
   show figure: set block(breakable: true)
-  // show figure.where(kind: "image"): set block(sticky: true)
-  // show figure.where(kind: "image-en"): set block(sticky: true)
+  show figure.where(kind: "image"): set block(sticky: true)
+  show figure.where(kind: "image-en"): set block(sticky: true)
 
-  show table: set text(size: 12pt, weight: "regular")
-  show table: set par(leading: 14pt)
+  // 设置表格字体和排版样式
+  // 图题及图中文字用5号宋体 -> 表格同
+  show table: set text(size: 字号.五号, weight: "regular")
+  show table: set par(leading: 字号.小四)
+  show table: set par(spacing: 字号.小二) // note: 修复设置段距过小会导致表注错位
   show table: it => state("xubiao").update(false) + it
 
   it
@@ -116,16 +129,24 @@
   show: my-show-table
 
   // 设置页面格式
-  // 页边距：下面这个是封面页的页边距，不是正文的页边距（正文的页边距由 pass2 设置）
+  // 页边距：下面这个是封面页和承诺书的页边距，不是正文的页边距（正文的页边距由 pass2 设置）
   set page(
     paper: "a4",
-    margin: (left: 3.18cm, right: 3.18cm, top: 2.54cm, bottom: 2.54cm),
+    margin: (left: 3.18cm, right: 3.18cm, top: 2.54cm, bottom: 2.54cm), // 封面页和承诺书的页边距
     numbering: none, // 开头页不编号页码
     number-align: center + bottom, // 底端居中
+    header-ascent: 15%,
+    footer-descent: 15%,
+    footer: context {
+      // 设置页脚（页码）字体大小
+      set align(center)
+      set text(size: 字号.五号)
+      counter(page).display()
+    },
   )
 
   // 显示中文字体的伪粗体和伪斜体
-  show: show-fakebold
+  show: show-cn-fakebold
   show: show-fakeitalic
 
   // 设置代码字体
@@ -140,12 +161,11 @@
   // 设置正文样式
   set par(first-line-indent: (amount: 2em, all: true)) // 段落首行缩进
   // 行距：全文固定值20磅=段间距
-  // Word的行距在Typst相当于 leading - text.size = 20-12 = 8pt
-  // 不够好看所以设置为 10pt
+  // Word的行距在Typst相当于 leading - text.size = 20pt-1em
+  // 但经过严格对齐（用尺子量）得出上面计算出这个行距是有差别的，正确的应该是20pt-0.81em
   // 文档：https://typst.app/docs/reference/model/par/#leading 和 中文FAQ
-  set par(leading: 20pt - 0.7em) // 行距
-  // Known: 修改段距过小会导致sjtu的表注错位
-  set par(spacing: 20pt - 0.2em) // 段距
+  set par(leading: 20pt - 0.81em) // 行距
+  set par(spacing: 20pt - 0.81em) // 段距
   set par(justify: true) // 设置段落两端对齐
 
   // 设置标题自动编号格式（for cover part）
@@ -156,12 +176,13 @@
 
   show heading.where(level: 1): it => {
     // 正文第一级标题（章节）
-    // 三号粗黑体居中必须换页
+    // 正文第一级标题用三号粗黑体，章序号采用阿拉伯数字，居中上下空一行
     set align(center)
+    set block(below: 2em)
     set text(font: TimeSimHei, size: 字号.三号, weight: "bold")
     pagebreak(weak: true)
+    v(1.3em)
     it
-    v(1em)
   }
 
   show heading.where(level: 2): it => {
@@ -220,14 +241,15 @@
   set page(
     paper: "a4",
     margin: (left: 2.8cm, right: 2.2cm, top: 2.8cm, bottom: 2.2cm),
-    numbering: "I", // 使用罗马数字编号
+    // 使用罗马数字编号页码
+    numbering: "I",
   )
   it
 }
 
 #let fmt-pass3(it) = {
-  // pass3 之后是正文
-  // 设置页眉和header样式
+  // pass3-4 之后是正文
+  // pass3仅设置页眉样式
   // 页眉字体中文用小五号宋体，英文用Times New Roman，上加0.5磅双线。
   let sign_up_case(it) = {
     align(center)[
@@ -240,7 +262,6 @@
     ]
   }
   set page(
-    numbering: "1",
     header: context if calc.odd(counter(page).get().first()) {
       // 奇数页
       // 获取当前标题内容
@@ -280,10 +301,19 @@
       sign_up_case(if headingTitle == none { [#headingNumber] } else { [#headingNumber #headingTitle] })
     } else {
       let chinese-title = state("chinese-title").get()
+      let big-title = state("big-title").get()
       // 偶数页
-      sign_up_case([广东石油化工学院毕业论文(设计)：#chinese-title])
+      sign_up_case([广东石油化工学院#big-title：#chinese-title])
     },
   )
+
+  it
+}
+
+#let fmt-pass4(it) = {
+  // pass3-4 之后是正文
+  // pass4设置正文页脚（即页码）和heading样式
+  set page(numbering: "1")
 
   // 设置正文标题的 supplement 和 numbering
   // 如果想要第一章的话改成第{1:一}章
@@ -307,6 +337,7 @@
 }
 
 #let paper-cover(
+  大标题,
   中文题目,
   英文题目,
   学号,
@@ -323,7 +354,7 @@
   仅显示下划线: false,
 ) = {
   set align(left)
-  text(size: 字号.五号)[\u{20}] * 49 * 2
+  text(size: 字号.小五)[#h(49em * 0.5)]
   text(size: 字号.四号)[
     #if 仅显示下划线 {
       [学号：*#underline([\u{20}] * 12 * 2)*]
@@ -331,40 +362,31 @@
       [学号：*#underline(学号)*]
     }
   ]
-  v(字号.五号)
+  v(字号.五号 + 9.5pt)
 
-  // 放入学校的 title
+  // 放入学校的 title 图片
   align(center)[
     #set par(spacing: 0pt, leading: 0pt)
     #image("assets/header.png", height: 1.83cm, width: 9.72cm)
 
-    // 28磅的换行
+    // 手搓的调整距离
+    #v(1.85em)
+    // 一个28磅的换行
     #set text(size: 28pt)
     #linebreak()
   ]
 
   align(center)[
-    #set text(size: 40pt, weight: "bold", font: TimeSimHei, tracking: 10pt) // 40磅黑体加黑居中
-    毕业论文（设计）
+    #set text(size: 40pt, weight: "bold", font: TimeSimHei, tracking: 6pt) // 40磅黑体加黑居中
+    #大标题
 
-    // 6行五号+1行二号+1行小二号
-    #set text(size: 字号.五号)
-    #linebreak()
-    #linebreak()
-    #linebreak()
-    #linebreak()
-    #linebreak()
-    #linebreak()
-
-    #set text(size: 字号.二号)
-    #linebreak()
-
-    #set text(size: 字号.小二)
-    #linebreak()
+    // 调整距离
+    #v(137pt)
   ]
 
-  // 设置中文题目状态，用于页眉
+  // 设置中文题目状态，用于页眉等
   state("chinese-title").update(中文题目)
+  state("big-title").update(大标题)
   if type(学生) != str {
     学生 = wordometer_utils.extract-text(学生)
   }
@@ -425,7 +447,8 @@
         )]
       }
       let cjk_len = it => {
-        let count = wordometer_utils.extract-text(it).matches(regex("[\p{Han}]|[\p{Latin}'’.,\-]+")).len()
+        let count = wordometer_utils.extract-text(it).matches(regex("[\p{Han}]")).len()
+        count += wordometer_utils.extract-text(it).matches(regex("[\p{Latin}'’.,\-]")).len() / 2.3
         count += wordometer_utils.extract-text(it).matches(regex("[（）]+")).len() / 1.999
         count += wordometer_utils.extract-text(it).matches(regex("\d")).len() / 1.999
         count
@@ -535,20 +558,34 @@
   pagebreak(weak: true)
   align(center)[
     #set text(size: 字号.三号, weight: "bold", font: TimeSimHei) // 三号黑体加粗
-    *广东石油化工学院本科毕业论文（设计）诚信承诺保证书*
+    #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
+    *广东石油化工学院本科#大标题\u{200b}诚信承诺保证书*
   ]
 
   linebreak()
+  v(1em)
 
-  [
-    #h(2em)
-    #set text(size: 字号.三号, lang: "zh", font: TimeSimSun) // 三号宋体
-    本人郑重承诺：《#中文题目》毕业论文（设计）的内容真实、可靠，是本人在 #指导教师 的指导下，独立进行研究所完成。毕业论文（设计）中引用他人已经发表或未发表的成果、数据、观点等，均已明确注明出处，如果存在弄虚作假、抄袭、剽窃的情况，本人愿承担全部责任。
-    #v(4em)
+  {
+    set text(size: 字号.三号, lang: "zh", font: TimeFanSun)
+    set par(leading: 1em) // 行距
+    set par(spacing: 1em) // 段距
+    set par(justify: true) // 设置段落两端对齐
+    set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
+
+    h(0.5em)
+    [
+      本人郑重承诺：《#中文题目》#大标题\u{200b}的内容真实、可靠，是本人在 #指导教师 的指导下，独立进行研究所完成。#大标题\u{200b}中引用他人已经发表或未发表的成果、数据、观点等，均已明确注明出处，如果存在弄虚作假、抄袭、剽窃的情况，本人愿承担全部责任。
+    ]
+    linebreak()
+    linebreak()
+    linebreak()
+    linebreak()
+    linebreak()
+
     // 签和年对齐
-    #align(right)[学生签名：#h(7em)]
-    #align(right)[年#h(2em)月#h(2em)日#h(3em)]
-  ]
+    align(right)[学生签名：#h(7em)]
+    align(right)[年#h(2em)月#h(2em)日#h(3em)]
+  }
 
   if 双面打印 {
     pagebreak(weak: false)
@@ -560,41 +597,46 @@
 // 卷头信息样式函数
 #let paper-up(中文摘要, 英文摘要, 中文关键词: (), 英文关键词: (), 尾随空页: true) = {
   counter(page).update(1)
+  if 中文摘要 != none {
+    [
+      #heading(level: 1)[摘#h(1em)要]
 
-  [
-    #heading(level: 1)[摘#h(1em)要]
+      #中文摘要 \
+      \
+      #text(font: TimeSimHei)[*关键词*]：#中文关键词.join("；")
+    ]
+  }
 
-    #中文摘要 \
-    \
-    #text(font: TimeSimHei)[*关键词*]：#中文关键词.join("；")
-  ]
+  if 英文摘要 != none {
+    pagebreak(weak: true)
+    [
+      #heading(level: 1)[Abstract]
 
-  pagebreak(weak: true)
-  [
-    #heading(level: 1)[Abstract]
-
-    #英文摘要 \
-    \
-    #text(font: TimeSimHei)[*Keywords*]：#英文关键词.join(", ")
-  ]
+      #英文摘要 \
+      \
+      #text(font: TimeSimHei)[*Keywords*]：#英文关键词.join(", ")
+    ]
+  }
 
   // 设置目录样式
   pagebreak(weak: true)
 
-  show outline.entry.where(level: 1): it => {
-    set text(
-      font: TimeSimHei,
-      //weight: "semibold",
-    )
-    it
-  }
-  show outline.entry.where(level: 1): set block(above: 1.25em, below: 1em)
-  show outline.entry.where(level: 2): set block(above: 1em)
-  show outline.entry.where(level: 3): set block(above: 1em)
+  show outline.entry: set text(
+    size: 字号.五号,
+  )
+  show outline.entry.where(level: 1): set text(
+    //font: TimeSimHei,
+    //weight: "semibold",
+  )
+  // show outline.entry.where(level: 1): set block(above: 1.25em, below: 1em)
+  let _outline_par_size = 0.75em
+  show outline.entry.where(level: 1): set block(above: _outline_par_size)
+  show outline.entry.where(level: 2): set block(above: _outline_par_size)
+  show outline.entry.where(level: 3): set block(above: _outline_par_size)
 
   outline(
     title: [目#h(1em)录],
-    indent: 1em,
+    indent: 2em,
     depth: 3,
   )
 

@@ -1,6 +1,6 @@
 #import "fmt-req.typ": (
-  acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, imagex, paper-cover,
-  paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
+  acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
+  paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
 )
 #import "@preview/mitex:0.2.6": mi, mitex
 
@@ -8,6 +8,7 @@
 #show: fmt-pass1
 
 #paper-cover(
+  [毕业论文（设计）], // 大标题
   [中文题目], // 中文题目
   [Title name in English], // 英文题目
   [114514666666], // 学号
@@ -24,8 +25,9 @@
   双面打印: false,
 )
 
-// 在 pass12 之后开始编写论文摘要
+// 在 pass123 之后开始编写论文摘要
 #show: fmt-pass2
+#show: fmt-pass3 // 页眉
 
 #paper-up(
   // 中文摘要
@@ -48,8 +50,8 @@
   尾随空页: false,
 )
 
-// 在 pass123 之后开始编写论文正文
-#show: fmt-pass3
+// 在 pass1234 之后开始编写论文正文
+#show: fmt-pass4
 
 #set text(tracking: 0.051pt)
 
@@ -82,6 +84,8 @@
 
 = 相关技术简介
 
+#linebreak()
+
 #([×\u{200b}] * 235)……
 
 == ××××××××
@@ -104,10 +108,19 @@
 
 = ××系统分析
 
+#linebreak()
+
+#([×\u{200b}] * 301)
+
 == 可行性分析（问题定义和可行性分析）
+
+#([×\u{200b}] * 491)……
+
+#([×\u{200b}] * 491)……
 
 == ×××系统需求分析
 
+#([×\u{200b}] * 298)
 
 === ×××功能需求分析
 

@@ -46,6 +46,7 @@
 
    ```typst
      #paper-cover(
+       [毕业论文（设计）]      // 大标题
        [你的论文中文题目],     // 中文题目
        [Your English Title],   // 英文题目
        [你的学号],             // 学号
@@ -177,20 +178,9 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 |优先级|类型|项目|
 |-|-|-|
-|HIGH|BUG|解决使用双面打印不正确的问题|
-|MEDIUM|FUNC|加入图注功能|
-|MEDIUM|FUNC|加入普通的边框表格功能|
-|MEDIUM|CONFLICT|段间距过大待改（修改段距过小会导致sjtu的表注错位）|
-|MEDIUM|OPT|解决封面个人信息右向过于突出的问题|
-|MEDIUM|IMPL|解决无法准确检测一二级标题是否紧贴的问题|
-|LOW|CONFLICT|引文的项间和项内行间距待改？|
-|LOW|OPT|考虑把公式的字体设置为与Latex相同|
-|LOW|OPT|标题太挤了待改（set block in heading）|
-|LOW|CONFLICT|页眉的冒号从全角改为半角？|
-|LOW|CONFLICT|附录的标题调整为和正文一样一二级标题紧贴时缩减一个空行？|
-|LOW|BUG|解决封面个人信息中的\d字符过多就会导致换行和下划线错误的问题|
-|LOW|FUTURE|调整中英文字体不一样大（高）问题（FAQ）|
-|LOW|CONFLICT|优化中英文的下划线不齐平问题（FAQ）|
+|HIGH|FUNC|自动导出双面打印功能|
+|MEDIUM|FUNC|普通边框表格功能|
+|MEDIUM|OPT|封面个人信息右向过于突出影响美观|
 
 ## 📚 学习资源
 
