@@ -1,7 +1,12 @@
 #import "fmt-req.typ": (
   acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
-  paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
+  mask-pass, paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem, twoside-pass,
 )
+
+// 盲审模式和双面打印模式
+// 需要使用哪个功能就把哪个 enable 设置为 true
+#show: mask-pass.with(enable: false)
+#show: twoside-pass.with(enable: false, full: false)
 
 // 在 pass1 之后开始编写论文封面和前面的内容
 #show: fmt-pass1
@@ -21,7 +26,6 @@
   datetime(year: 2025, month: 12, day: 31), // 结束日期
   显示下划线: true,
   仅显示下划线: false,
-  双面打印: false,
 )
 
 // 在 pass123 之后开始编写论文摘要
@@ -94,7 +98,7 @@
 
 本文......
 
-= 数学与引用文献的标注
+= 数学、化学与引用文献的标注
 
 == 数学
 
@@ -164,9 +168,9 @@ $
     &+ nabla_k f_(i j) nabla^k f^(i j) + f^(i j) f^k [2 nabla_i R_(j k) - nabla_k R_(i j)]).
 $
 
-如果要使用LaTex数学公式的，可以借助 `mitex` 包，自动把LaTex的数学公式转换为Typst的公式：
+如果要使用LaTex的公式语法，可以借助 `mitex` 包，它将LaTeX代码处理成抽象语法树（AST）。然后将 AST 转换为 Typst 代码，并使用 `eval` 函数将代码评估为 Typst 内容。具体使用方法如下：
 
-#import "@preview/mitex:0.2.6": mi, mitex
+#import "@preview/mitex:0.2.7": mi, mitex
 #mitex(
   `
   \begin{cases}
@@ -177,6 +181,7 @@ $
   \end{cases}
 `,
 )
+
 上面是用 `mitex` 包表达的一个线性方程组，包也支持行内使用数学符号，如 #mi("\pi")，#mi("z = -1") 等。
 
 === 定理环境
@@ -212,6 +217,39 @@ $
     所以……
   ]
 ] <thm:res>
+
+== 化学方程式
+
+使用群友科技 Typsium 编写美观的化学式和化学方程式。
+
+#import "@preview/typsium:0.3.1": ce
+
+有多种不同种类的箭头可供选择。
+
+#ce[->]
+#ce[=>]
+#ce[<=>]
+#ce[<=]
+#ce("<->")
+#ce("<-")
+
+你可以通过添加方括号来给它们添加额外的参数（例如顶部或底部的文字）。
+
+$
+  #ce("->[top text][bottom text]")
+$
+
+通过用 `ce` 包裹化学方程式，你可以把他显示在公式或文本中。
+
+$
+  #ce("[Cu(H2O)4]^2+ + 4NH3 -> [Cu(NH3)4]^2+ + 4H2O")
+$
+
+分子解析是灵活的，支持多种不同的书写方式，因此你可以复制并粘贴你的公式，它们很可能可以正常工作。氧化数可以像这样^^添加，自由基可以像这样.添加，水合基团可以像这样添加。
+
+你可以使用多种类型的括号。默认情况下它们会自动缩放，但你可以通过显示规则禁用它。
+
+行内公式通常需要稍微紧凑一些；为此，有一个影响布局的规则，可以为反应的每个部分单独开启或关闭。
 
 == 引用文献的标注
 
@@ -328,7 +366,7 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
 
 === 基本表格
 
-编排表格应简单明了，表达一致，明晰易懂，表文呼应、内容一致。表题置于表上，研究生学位论文可以用中、英文两种文字居中排写，中文在上，也可以只用中文。
+表的编排，一般是内容和测试项目由左向右横读，数据依序竖排。表应当有“自明性”。要有表号、表名及必要的说明，居中置于表的上方。表中文字、符号的字体应比正文小一号。通过在 `tablex` 函数的参数中设置 `caption-en` 可在表中添加英文图题，一般来说中文表题在上。
 
 表格的编排建议采用国际通行的三线表#footnote[三线表，以其形式简洁、功能分明、阅读方便而在科技论文中被推荐使用。三线表通常只有 3 条线，即顶线、底线和栏目线，没有竖线。]，如@tbl:standard-table 所示。
 
@@ -354,10 +392,10 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
   label-name: "standard-table",
 )
 
-通过更改表格的样式设置，可以将其显示为边框表格，如@tbl:normal-table 所示。（注意：边框表格跨页时，续表字样会被边框框选。故应传入参数 `breakable: false`，取消其续表功能。）
+通过更改表格的样式设置，可以将其显示为边框表格，如@tbl:normal-table 所示。（注意：边框表格跨页时，续表字样会被边框框选。故应传入参数 `breakable: false`取消其续表功能）
 
 #tablex(
-  ..for i in range(3) {
+  ..for i in range(2) {
     ([250], [88], [5900], [1.65])
   },
   header: (
@@ -431,7 +469,7 @@ Typst 使用 Hayagriva 管理参考文献，有部分细节问题还在逐步修
   label-name: "footnote-table",
 )
 
-如某个表需要转页接排，`tablex` 自动实现了续表功能。接排时表题省略，表头应重复书写，并上书“续表 xx”，如@tbl:long-table 所示。（注意：当表格跨页时，脚注不能添加在表头中，会导致重复标注，此时应传入参数 `breakable: false`，取消续表功能。）
+如某个表需要转页接排，`tablex` 自动实现了续表功能。接排时表题省略，表头应重复书写，并上书“续表 xx”，如@tbl:long-table 所示。（注意：当表格跨页时，脚注不能添加在表头中，会导致重复标注，此时应传入参数 `breakable: false`取消续表功能）
 
 #tablex(
   ..for i in range(18) {
@@ -518,6 +556,11 @@ def fibonacci(n: int) -> int:
   bibfunc: bibliography.with("refs.bib"),
   full: true,
 ) // full: false 表示只显示已引用的文献，不显示未引用的文献；true 表示显示所有文献
+
+// 致谢
+#acknowledgement-page[
+  致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
+]
 
 // 下面开始编写附录
 #show: appendix
@@ -659,6 +702,47 @@ def fibonacci(n: int) -> int:
   label-name: "fletcher-example",
 )
 
+== Graphviz 图
+
+`diagraph` 包是一个简单的 `Graphviz Typst Binding`，用于在Typst中绘制Graphviz图。你可以使用 `render` 函数将 Graphviz Dot 字符串呈现为 SVG 图像。或者，你可以使用 `raw-render` 来传递raw而不是字符串。
+
+#import "@preview/diagraph:0.3.7": raw-render, render
+
+#imagex(
+  render("digraph { a -> b }"),
+  caption: [字符串绘制Graphviz图效果],
+  label-name: "graphviz-example",
+)
+
+#imagex(
+  raw-render(width: 100%, ```dot
+  digraph G {
+    // 全局样式
+    graph [bgcolor="lightyellow", fontname="Arial", fontsize=10, rankdir=TB, splines=ortho];
+    node [shape="record", style="filled", fillcolor="lightblue", fontname="Arial", fontsize=10];
+    edge [color="darkgray", fontname="Arial", fontsize=9, arrowhead="normal"];
+
+    // 定义节点（使用 record 形状支持表格化类图）
+    Book [label="{Book|+title: string\n+isbn: string|+getDetails(): string}"];
+    Author [label="{Author|+name: string|+getBooks(): Book[]}"];
+    Publisher [label="{Publisher|+name: string|+getBooks(): Book[]}"];
+    User [label="{User|+username: string\n+email: string|+borrowBook(b: Book)\n+returnBook(b: Book)}"];
+    Loan [label="{Loan|+borrowDate: date\n+returnDate: date|null|}"];
+
+    // 定义关系（调整箭头方向使逻辑更自然）
+    Author -> Book [label="writes"];
+    Publisher -> Book [label="publishes"];
+    User -> Loan [label="makes"];
+    Loan -> Book [label="refers to"];
+
+    // 可选：增加约束使布局更紧凑
+    {rank=same; Author; Publisher; User}
+  }
+  ```),
+  caption: [raw绘制Graphviz图效果],
+  label-name: "graphviz-example-raw",
+)
+
 == 数据图
 
 `lilaq` 是一个强大的 Typst 绘图库，可以绘制各种类型的数据图。
@@ -709,7 +793,3 @@ def fibonacci(n: int) -> int:
   caption-en: [Scatter],
   label-name: "lilaq-scatter-example",
 )
-
-#acknowledgement-page(双面打印: false)[
-  致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
-]

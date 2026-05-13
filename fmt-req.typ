@@ -33,6 +33,19 @@
   八号: 5pt,
 )
 
+// 启用盲审模式
+#let mask-pass(it, enable: false, fill_with: "\u{2593}") = {
+  state("mask-options").update((enabled: enable, fill_with: fill_with))
+  it
+}
+
+// 启用双面打印模式，自动加入空白页占位
+#let twoside-pass(it, enable: false, full: false) = {
+  // 论文封面（底）、学术诚信声明、目录、致谢和附录部分应与正文部分分开，另起页书写；中英文摘要及关键词、目录、正文、参考文献、附录实行双面打印。
+  state("twoside-options").update((enabled: enable, full: full))
+  it
+}
+
 #let my-show-table(it) = {
   // 从 sjtu 模板中复制的设置
   // 用于对 tablex 生效
@@ -106,8 +119,8 @@
     set text(size: 字号.五号, weight: "bold")
     it
   }
-  show figure.where(kind: "table"): set figure.caption(position: bottom)
-  show figure.where(kind: "table-en"): set figure.caption(position: bottom)
+  show figure.where(kind: "table"): set figure.caption(position: top)
+  show figure.where(kind: "table-en"): set figure.caption(position: top)
   show figure.where(kind: "algorithm"): set figure.caption(position: bottom)
   show figure: set block(breakable: true)
   show figure.where(kind: "image"): set block(sticky: true)
@@ -358,10 +371,26 @@
   职称,
   启动时间,
   结束时间,
-  双面打印: true,
   显示下划线: false,
   仅显示下划线: false,
-) = {
+) = context {
+  let 学号 = 学号
+  let 学院 = 学院
+  let 专业 = 专业
+  let 班级 = 班级
+  let 学生 = 学生
+  let 指导教师 = 指导教师
+  let 职称 = 职称
+  if state("mask-options").get().enabled {
+    let block = state("mask-options").get().fill_with
+    学号 = block * 8
+    学院 = block * 5
+    专业 = block * 8
+    班级 = block * 2
+    学生 = block * 5
+    指导教师 = block * 3
+    职称 = block * 3
+  }
   set align(left)
   text(size: 字号.小五)[#h(49em * 0.53)]
   text(size: 字号.四号)[
@@ -418,9 +447,12 @@
 
   align(center)[
     #set text(size: 字号.小二, weight: "bold", font: TimeSimHei, tracking: 2pt) // 小二号黑体加黑居中
+    #set par(leading: 1em)
+
     #underline-warpper(中文题目)
-    #v(字号.五号)
+
     #text(size: 字号.五号, linebreak())
+
     #underline-warpper(英文题目)
   ]
 
@@ -461,6 +493,7 @@
         count += wordometer_utils.extract-text(it).matches(regex("[\p{Latin}'’.,\-]")).len() / 2.3
         count += wordometer_utils.extract-text(it).matches(regex("[（）]+")).len() / 1.999
         count += wordometer_utils.extract-text(it).matches(regex("\d")).len() / 1.999
+        count += wordometer_utils.extract-text(it).matches(regex("[\u{2580}-\u{259F}]")).len() * 0.75 // block
         count
       }
       let min = (a, b) => {
@@ -555,13 +588,13 @@
     }
   ]
 
-  if 双面打印 {
-    pagebreak(weak: false)
-    pagebreak(weak: false)
-  }
-
   // 诚信承诺保证书
-  pagebreak(weak: true)
+  pagebreak(
+    weak: true,
+    to: if state("twoside-options").get().enabled {
+      "odd"
+    },
+  )
   align(center)[
     #set text(size: 字号.三号, weight: "bold", font: TimeSimHei) // 三号黑体加粗
     #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
@@ -593,11 +626,12 @@
     align(right)[年#h(2em)月#h(2em)日#h(3em)]
   }
 
-  if 双面打印 {
-    pagebreak(weak: false)
-    pagebreak(weak: false)
-  }
-  pagebreak(weak: true)
+  pagebreak(
+    weak: true,
+    to: if state("twoside-options").get().enabled {
+      "odd"
+    },
+  )
 }
 
 // 卷头信息样式函数
@@ -657,14 +691,12 @@
 // 标题用三号黑体，居中上下空一行
 // 参考文献正文为五号宋体
 #let bibliography-page(
-  双面打印: false,
   bibfunc: none,
   full: false,
-) = {
-  // 换页到奇数页（双面打印时）
+) = context {
   pagebreak(
     weak: true,
-    to: if 双面打印 {
+    to: if state("twoside-options").get().enabled {
       "odd"
     },
   )
@@ -681,7 +713,7 @@
   }
   pagebreak(
     weak: true,
-    to: if 双面打印 {
+    to: if state("twoside-options").get().enabled {
       "odd"
     },
   )
@@ -689,8 +721,6 @@
 
 // 附录样式
 #let appendix-first-heading(
-  doctype: "master",
-  双面打印: false,
   body,
 ) = {
   set heading(
@@ -721,10 +751,9 @@
 }
 #let appendix(
   doctype: "master",
-  双面打印: false,
   body,
 ) = {
-  show: appendix-first-heading.with(doctype: doctype, 双面打印: 双面打印)
+  show: appendix-first-heading
   show: other-heading.with(appendix: true)
 
   show heading: i-figured.reset-counters.with(extra-kinds: ("image", "image-en", "table", "table-en", "algorithm"))
@@ -829,39 +858,22 @@
 }
 
 // 致谢样式
-#let no-numbering-first-heading(
-  body,
-) = {
-  show heading: set par(justify: false)
-  set heading(numbering: none, supplement: auto, bookmarked: true)
-  show heading.where(level: 1): it => {
-    // 正文第一级标题（章节）
-    // 三号粗黑体居中必须换页
-    set align(center)
-    set text(font: TimeSimHei, size: 字号.三号, weight: "bold")
-    pagebreak(weak: true)
-    it.body
-    v(1em)
-  }
-  body
-}
 #let acknowledgement-page(
-  双面打印: false,
-  anonymous: false,
   body,
-) = {
+) = context {
   pagebreak(
     weak: true,
-    to: if 双面打印 {
+    to: if state("twoside-options").get().enabled {
       "odd"
     },
   )
 
-  if anonymous {
+  if state("mask-options").get().enabled {
     return
   }
 
-  show: no-numbering-first-heading.with()
+  show heading: set par(justify: false)
+  set heading(numbering: none, supplement: [致谢], bookmarked: true)
 
   heading(level: 1)[致#h(1em)谢]
 
@@ -869,7 +881,7 @@
 
   pagebreak(
     weak: true,
-    to: if 双面打印 {
+    to: if state("twoside-options").get().enabled {
       "odd"
     },
   )

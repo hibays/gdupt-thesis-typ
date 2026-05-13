@@ -1,8 +1,13 @@
 #import "fmt-req.typ": (
   acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
-  paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
+  mask-pass, paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem, twoside-pass,
 )
 #import "@preview/mitex:0.2.6": mi, mitex
+
+// 盲审模式和双面打印模式
+// 需要使用哪个功能就把哪个 enable 设置为 true
+#show: mask-pass.with(enable: false)
+#show: twoside-pass.with(enable: false, full: false)
 
 // 在 pass1 之后开始编写论文封面和前面的内容
 #show: fmt-pass1
@@ -22,7 +27,6 @@
   datetime(year: 2025, month: 12, day: 31), // 结束日期
   显示下划线: true,
   仅显示下划线: false,
-  双面打印: false,
 )
 
 // 在 pass123 之后开始编写论文摘要
@@ -196,6 +200,12 @@
   full: true,
 ) // full: false 表示只显示已引用的文献，不显示未引用的文献；true 表示显示所有文献
 
+// <---------------- 编写致谢 ---------------->
+
+#acknowledgement-page[
+  致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
+]
+
 // <---------------- 编写附录 ---------------->
 
 #show: appendix
@@ -289,9 +299,3 @@
 - 计算矩阵的逆
 - 计算矩阵的秩
 - 求解线性规划问题
-
-// <---------------- 编写致谢 ---------------->
-
-#acknowledgement-page(双面打印: false)[
-  致谢主要感谢导师和对论文工作有直接贡献和帮助的人士和单位。致谢言语应谦虚诚恳，实事求是。
-]
