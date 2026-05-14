@@ -8,7 +8,7 @@
     <summary style="cursor: pointer; font-weight: bold;">查看更多图片</summary>
     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
     <img src="docs/abstract.webp" alt="abstract" style="width: 100%; height: auto; border-radius: 3px;" />
-      <img src="docs/outline_and_1c.webp" alt="outline_and_1c" style="width: 100%; height: auto; border-radius: 3px;" />
+      <img src="docs/1c_and_2c.webp" alt="1c_and_2c" style="width: 100%; height: auto; border-radius: 3px;" />
     </div>
   </details>
 </div>
@@ -145,11 +145,11 @@
 ├── thesis.typ          # 主论文文件（在此编写内容）
 ├── fmt-req.typ         # 格式要求和样式定义
 ├── refs.bib            # 参考文献数据库（BibTeX 格式）
-├── structure.typ       # 论文模板复现文件
+├── structure.typ       # 论文Word模板复现文件
 ├── assets/             # 图片资源（校徽、题字等）
 │   └── header.png      # 学校名书法图片
 ├── figures/            # 论文图表
-│   ├── fig-xxx.png    # 图表 xxx
+│   ├── fig-xxx.png     # 图表 xxx
 │   └── ...
 └── docs/               # README 展示图片
 ```
