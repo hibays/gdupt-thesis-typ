@@ -51,7 +51,6 @@
   // 关键词
   中文关键词: ([论文内容], [创造性成果], [实际意义], [记述方法]),
   英文关键词: ([Thesis Content], [Creative Achievements], [Practical Significance], [Description Method]),
-  尾随空页: false,
 )
 
 // 在 pass1234 之后开始编写论文正文

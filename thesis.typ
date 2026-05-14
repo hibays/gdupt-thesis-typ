@@ -1,6 +1,7 @@
 #import "fmt-req.typ": (
   acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
-  mask-pass, paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem, twoside-pass,
+  mask-pass, notation-page, paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
+  twoside-pass,
 )
 
 // 盲审模式和双面打印模式
@@ -48,7 +49,25 @@
   // 关键词
   中文关键词: ([论文内容], [创造性成果], [实际意义], [记述方法]),
   英文关键词: ([Thesis Content], [Creative Achievements], [Practical Significance], [Description Method]),
-  尾随空页: false,
+  插图清单: true,
+  附表清单: true,
+  符号说明: [ // 如果不需要符号说明或想自定义可以删掉这项然后在pass[3,4]内用notation-page自定义或设置为 none
+    #align(center, block(
+      width: 60%,
+      grid(
+        align: (right, left),
+        columns: (1fr, 1.5fr),
+        row-gutter: 20pt - 0.5em,
+        column-gutter: 2em,
+        [$alpha$], [衰减系数],
+        [$beta$], [增益因子],
+        [$gamma$], [反射率],
+        [$delta$], [相位差],
+        [API], [应用程序接口 (Application Programming Interface)],
+        [GUI], [图形用户界面 (Graphical User Interface)],
+      ),
+    ))
+  ],
 )
 
 // 在 pass1234 之后开始编写论文正文

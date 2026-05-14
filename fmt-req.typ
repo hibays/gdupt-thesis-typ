@@ -46,6 +46,12 @@
   it
 }
 
+// 符号说明/缩略词表页面
+#let notation-page(title: [符号说明], body) = {
+  heading(level: 1, numbering: none, outlined: false)[#title]
+  body
+}
+
 #let my-show-table(it) = {
   // 从 sjtu 模板中复制的设置
   // 用于对 tablex 生效
@@ -635,7 +641,15 @@
 }
 
 // 卷头信息样式函数
-#let paper-up(中文摘要, 英文摘要, 中文关键词: (), 英文关键词: (), 尾随空页: true) = {
+#let paper-up(
+  中文摘要,
+  英文摘要,
+  中文关键词: (),
+  英文关键词: (),
+  插图清单: false,
+  附表清单: false,
+  符号说明: none,
+) = context {
   counter(page).update(1)
   if 中文摘要 != none {
     [
@@ -643,23 +657,37 @@
 
       #中文摘要 \
       \
-      #text(font: TimeSimHei)[*关键词*]：#中文关键词.join("；")
+      #if 中文关键词.len() > 0 {
+        text(font: TimeSimHei)[*关键词*：] + 中文关键词.join("；")
+      }
     ]
   }
 
   if 英文摘要 != none {
-    pagebreak(weak: true)
+    pagebreak(
+      weak: true,
+      to: if state("twoside-options").get().enabled {
+        "odd"
+      },
+    )
     [
       #heading(level: 1)[Abstract]
 
       #英文摘要 \
       \
-      #text(font: TimeSimHei)[*Keywords*]：#英文关键词.join(", ")
+      #if 英文关键词.len() > 0 {
+        [*Keywords*: ] + 英文关键词.join(", ")
+      }
     ]
   }
 
   // 设置目录样式
-  pagebreak(weak: true)
+  pagebreak(
+    weak: true,
+    to: if state("twoside-options").get().enabled {
+      "odd"
+    },
+  )
 
   show outline.entry: set text(
     size: 字号.五号,
@@ -680,9 +708,51 @@
     depth: 3,
   )
 
-  pagebreak(weak: true)
-  if 尾随空页 {
-    page([], numbering: none)
+  // 插图清单
+  if 插图清单 {
+    pagebreak(
+      weak: true,
+      to: if state("twoside-options").get().enabled {
+        "odd"
+      },
+    )
+    i-figured.outline(title: [插图清单], target-kind: "image")
+  }
+
+  // 附表清单
+  if 附表清单 {
+    pagebreak(
+      weak: true,
+      to: if state("twoside-options").get().enabled {
+        "odd"
+      },
+    )
+    i-figured.outline(title: [附表清单], target-kind: "table")
+  }
+
+  // 符号说明/缩略词等汇集表
+  if 符号说明 != none {
+    pagebreak(
+      weak: true,
+      to: if state("twoside-options").get().enabled {
+        "odd"
+      },
+    )
+    notation-page(title: [符号说明], 符号说明)
+  }
+
+  pagebreak(
+    weak: true,
+    to: if state("twoside-options").get().enabled {
+      "odd"
+    },
+  )
+  context {
+    let opts = state("twoside-options").get()
+    let is-twoside = opts.enabled and (opts.full or true)
+    if is-twoside {
+      page([], numbering: none)
+    }
   }
   counter(page).update(1)
 }
