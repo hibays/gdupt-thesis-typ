@@ -708,6 +708,31 @@
     depth: 3,
   )
 
+  // 筛选出所有 footnote 并清除
+  // 使图表 caption 里可以使用 footnote 而不影响目录显示
+  let fitter-body(body) = {
+    if body.func() == footnote {
+      // 筛选出所有 footnote 并清除
+      none
+    } else if body.func() == [].func() {
+      // sequence: 过滤 children 后 join 重建
+      let cleaned = body.children.map(fitter-body).filter(c => c != none)
+      cleaned.join()
+    } else if body.has("children") {
+      // 其他有 children 的元素（par、strong 等）
+      let cleaned = body.children.map(fitter-body).filter(c => c != none)
+      body.with(children: cleaned)
+    } else {
+      // 纯文字、数字、box、repeat 等直接保留，不递归
+      body
+    }
+  }
+  // 重建 outline inner，清除目录清单中的 footnote
+  show outline.entry: it => {
+    show footnote: it => none // 阻止脚注计数
+    link(it.element.location(), it.indented(it.prefix(), fitter-body(it.inner())))
+  }
+
   // 插图清单
   if 插图清单 {
     pagebreak(
