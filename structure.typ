@@ -4,10 +4,10 @@
 )
 #import "@preview/mitex:0.2.6": mi, mitex
 
-// 盲审模式和双面打印模式
+// 盲审模式和定制双面打印模式
 // 需要使用哪个功能就把哪个 enable 设置为 true
 #show: mask-pass.with(enable: false)
-#show: twoside-pass.with(enable: false, full: false)
+#show: twoside-pass.with(enable: false)
 
 // 在 pass1 之后开始编写论文封面和前面的内容
 #show: fmt-pass1

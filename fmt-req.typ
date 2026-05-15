@@ -39,11 +39,36 @@
   it
 }
 
-// 启用双面打印模式，自动加入空白页占位
-#let twoside-pass(it, enable: false, full: false) = {
-  // 论文封面（底）、学术诚信声明、目录、致谢和附录部分应与正文部分分开，另起页书写；中英文摘要及关键词、目录、正文、参考文献、附录实行双面打印。
-  state("twoside-options").update((enabled: enable, full: full))
+// 启用双面打印模式，根据*官方的文档要求*，自动加入占位页（有页眉页脚）占位，从而使内容页于右侧纸开始 \
+// 参数：
+// - `enable`：是否启用双面打印模式，在论文封面、学术诚信声明、目录、致谢和附录部分后加入占位页占位，使内容页于右侧纸开始。
+// - `extend`：在 `enable` 的基础上，在章节标题后加入占位页占位，使章节标题于右侧纸开始。
+// - `count-blank`：是否将占位页加入页码计数。设置为 `false` 的话会在占位页位置把页码减一，可能导致跳页，此时建议把 `keep-footer` 设为 `false` 。
+// - `keep-header`：是否显示占位页的页眉。设置为 `false` 的话会把占位页的页眉设为空。
+// - `keep-footer`：是否显示占位页的页脚。设置为 `false` 的话会把占位页的页脚设为空。
+#let twoside-pass(it, enable: false, extend: false, count-blank: true, keep-header: true, keep-footer: true) = {
+  // 论文封面（底）、学术诚信声明、目录、致谢和附录部分应与正文部分分开，另起页书写；
+  // 中英文摘要及关键词、目录、正文、参考文献、附录实行双面打印。
+  state("twoside-options").update((
+    enabled: enable,
+    extend: extend,
+    count-blank: count-blank,
+    keep-header: keep-header,
+    keep-footer: keep-footer,
+  ))
   it
+}
+
+// 双面打印节断页：根据*官方的文档要求*，在节之间自动加入占位页（有页眉页脚）占位，使内容页于右侧纸开始
+#let twoside-section-pagebreak() = context {
+  let opts = state("twoside-options").get()
+  if not opts.enabled {
+    pagebreak(weak: true)
+    return
+  }
+
+  // 进入下一奇数页（从偶数页直接进入，从奇数页跳过一空白偶数页）
+  pagebreak(weak: true, to: "odd")
 }
 
 // 符号说明/缩略词表页面
@@ -198,10 +223,17 @@
   show heading.where(level: 1): it => {
     // 正文第一级标题（章节）
     // 正文第一级标题用三号粗黑体，章序号采用阿拉伯数字，居中上下空一行
+    context {
+      let _opts = state("twoside-options").get()
+      if _opts.enabled and _opts.extend {
+        twoside-section-pagebreak()
+      } else {
+        pagebreak(weak: true)
+      }
+    }
     set align(center)
     set block(above: 2em, below: 2em)
     set text(font: TimeSimHei, size: 字号.三号, weight: "bold")
-    pagebreak(weak: true)
     v(1.3em)
     it
   }
@@ -309,8 +341,10 @@
         // 如果 filter 出来的结果为空，意味着我们就在章节中间
         // 重新使用 before(here()) 进行 query 来查询章节标题
         elems = query(selector(heading.where(level: 1)).before(here()))
-        headingTitle = elems.last().body
-        headingNumber = elem-num-handler(elems.last(), counter(heading).get().first() - 1)
+        if elems.len() != 0 {
+          headingTitle = elems.last().body
+          headingNumber = elem-num-handler(elems.last(), counter(heading).get().first() - 1)
+        }
       }
 
       let show_case = if headingTitle == none { [#headingNumber] } else { [#headingNumber #headingTitle] }
@@ -595,12 +629,7 @@
   ]
 
   // 诚信承诺保证书
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
   align(center)[
     #set text(size: 字号.三号, weight: "bold", font: TimeSimHei) // 三号黑体加粗
     #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
@@ -632,12 +661,7 @@
     align(right)[年#h(2em)月#h(2em)日#h(3em)]
   }
 
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
 }
 
 // 卷头信息样式函数
@@ -664,12 +688,7 @@
   }
 
   if 英文摘要 != none {
-    pagebreak(
-      weak: true,
-      to: if state("twoside-options").get().enabled {
-        "odd"
-      },
-    )
+    twoside-section-pagebreak()
     [
       #heading(level: 1)[Abstract]
 
@@ -682,12 +701,7 @@
   }
 
   // 设置目录样式
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
 
   show outline.entry: set text(
     size: 字号.五号,
@@ -735,50 +749,24 @@
 
   // 插图清单
   if 插图清单 {
-    pagebreak(
-      weak: true,
-      to: if state("twoside-options").get().enabled {
-        "odd"
-      },
-    )
+    twoside-section-pagebreak()
     i-figured.outline(title: [插图清单], target-kind: "image")
   }
 
   // 附表清单
   if 附表清单 {
-    pagebreak(
-      weak: true,
-      to: if state("twoside-options").get().enabled {
-        "odd"
-      },
-    )
+    twoside-section-pagebreak()
     i-figured.outline(title: [附表清单], target-kind: "table")
   }
 
   // 符号说明/缩略词等汇集表
   if 符号说明 != none {
-    pagebreak(
-      weak: true,
-      to: if state("twoside-options").get().enabled {
-        "odd"
-      },
-    )
+    twoside-section-pagebreak()
     notation-page(title: [符号说明], 符号说明)
   }
 
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
-  context {
-    let opts = state("twoside-options").get()
-    let is-twoside = opts.enabled and (opts.full or true)
-    if is-twoside {
-      page([], numbering: none)
-    }
-  }
+  twoside-section-pagebreak()
+
   counter(page).update(1)
 }
 
@@ -789,12 +777,7 @@
   bibfunc: none,
   full: false,
 ) = context {
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
 
   show bibliography: set text(font: TimeSimSun, size: 字号.五号) // 五号宋体
 
@@ -806,12 +789,7 @@
       full: full,
     )
   }
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
 }
 
 // 附录样式
@@ -956,12 +934,7 @@
 #let acknowledgement-page(
   body,
 ) = context {
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
 
   if state("mask-options").get().enabled {
     return
@@ -974,10 +947,5 @@
 
   body
 
-  pagebreak(
-    weak: true,
-    to: if state("twoside-options").get().enabled {
-      "odd"
-    },
-  )
+  twoside-section-pagebreak()
 }
