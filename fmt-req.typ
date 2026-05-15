@@ -348,7 +348,7 @@
     ]
   }
   set page(
-    header: context if calc.odd(counter(page).get().first()) {
+    header: context if calc.odd(counter(page).get().first() - _empty-page-counter.get().first()) {
       // 奇数页
       // 获取当前标题内容
       let headingTitle = ""
