@@ -210,7 +210,6 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 |优先级|类型|项目|
 |-|-|-|
-|HIGH|IMPL|双面打印模式实现不正确|
 |LOW|IMPL|边框表格续表不正确|
 
 ## 📚 学习资源

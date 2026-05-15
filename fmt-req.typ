@@ -43,21 +43,24 @@
 // 参数：
 // - `enable`：是否启用双面打印模式，在论文封面、学术诚信声明、目录、致谢和附录部分后加入占位页占位，使内容页于右侧纸开始。
 // - `extend`：在 `enable` 的基础上，在章节标题后加入占位页占位，使章节标题于右侧纸开始。
-// - `count-blank`：是否将占位页加入页码计数。设置为 `false` 的话会在占位页位置把页码减一，可能导致跳页，此时建议把 `keep-footer` 设为 `false` 。
+// - `respect-blank`：是否将占位页加入页码计数。设置为 `false` 的话会在占位页位置把页码减一，可能导致跳页，此时建议把 `keep-footer` 设为 `false` 。
 // - `keep-header`：是否显示占位页的页眉。设置为 `false` 的话会把占位页的页眉设为空。
 // - `keep-footer`：是否显示占位页的页脚。设置为 `false` 的话会把占位页的页脚设为空。
-#let twoside-pass(it, enable: false, extend: false, count-blank: true, keep-header: true, keep-footer: true) = {
+#let twoside-pass(it, enable: false, extend: false, respect-blank: true, keep-header: true, keep-footer: true) = {
   // 论文封面（底）、学术诚信声明、目录、致谢和附录部分应与正文部分分开，另起页书写；
   // 中英文摘要及关键词、目录、正文、参考文献、附录实行双面打印。
   state("twoside-options").update((
     enabled: enable,
     extend: extend,
-    count-blank: count-blank,
+    respect-blank: respect-blank,
     keep-header: keep-header,
     keep-footer: keep-footer,
   ))
   it
 }
+
+// Counter for tracking actually inserted blank pages (reliable across layout iterations)
+#let _empty-page-counter = counter("_empty-page")
 
 // 双面打印节断页：根据*官方的文档要求*，在节之间自动加入占位页（有页眉页脚）占位，使内容页于右侧纸开始
 #let twoside-section-pagebreak() = context {
@@ -67,8 +70,37 @@
     return
   }
 
-  // 进入下一奇数页（从偶数页直接进入，从奇数页跳过一空白偶数页）
-  pagebreak(weak: true, to: "odd")
+  {
+    set page(
+      footer: if opts.keep-footer { auto } else { none },
+    )
+    if opts.respect-blank {
+      if opts.keep-header {
+        pagebreak(weak: true, to: "odd")
+      } else {
+        set page(header: none)
+        pagebreak(weak: true, to: "odd")
+      }
+    } else {
+      // Show rule: intercept pagebreak(to: "odd") and step the counter
+      // when the current page is even (meaning a blank page will be inserted).
+      // Using counter (not state) avoids layout iteration issues.
+      show pagebreak.where(to: "odd"): it => {
+        context {
+          if calc.even(counter(page).get().first()) {
+            _empty-page-counter.step()
+          }
+        }
+        it
+      }
+      if opts.keep-header {
+        pagebreak(weak: true, to: "odd")
+      } else {
+        set page(header: none)
+        pagebreak(weak: true, to: "odd")
+      }
+    }
+  }
 }
 
 // 符号说明/缩略词表页面
@@ -152,7 +184,7 @@
   }
   show figure.where(kind: "table"): set figure.caption(position: top)
   show figure.where(kind: "table-en"): set figure.caption(position: top)
-  show figure.where(kind: "algorithm"): set figure.caption(position: bottom)
+  show figure.where(kind: "algorithm"): set figure.caption(position: top)
   show figure: set block(breakable: true)
   show figure.where(kind: "image"): set block(sticky: true)
   show figure.where(kind: "image-en"): set block(sticky: true)
@@ -161,7 +193,7 @@
   // 图题及图中文字用5号宋体 -> 表格同
   show table: set text(size: 字号.五号, weight: "regular")
   show table: set par(leading: 字号.小四)
-  show table: set par(spacing: 字号.小二) // note: 修复设置段距过小会导致表注错位
+  show table: set par(spacing: 1.5em) // note: 修复设置段距过小会导致表注错位
   show table: it => state("xubiao").update(false) + it
 
   it
@@ -286,9 +318,16 @@
       // 设置页脚（页码）字体大小
       set align(center)
       set text(size: 字号.五号)
-      counter(page).display()
+      let max(a, b) = if a > b { a } else { b }
+      let empty = _empty-page-counter.get().first()
+      numbering(
+        here().page-numbering(),
+        max(counter(page).get().first() - empty, 0),
+      )
     },
   )
+  _empty-page-counter.update(0)
+
   it
 }
 
@@ -368,6 +407,9 @@
       sign_up_case([广东石油化工学院#big-title：#chinese-title])
     },
   )
+  // 重置页码编号和空白页计数
+  counter(page).update(1)
+  _empty-page-counter.update(0)
 
   it
 }
@@ -388,8 +430,9 @@
     ),
     supplement: [正文],
   )
-  // 重置章节编号（after cover part）
-  counter(heading).update(0)
+  // 给正文重置页码和空白页计数
+  counter(page).update(1)
+  _empty-page-counter.update(0)
 
   it
 }
@@ -673,8 +716,7 @@
   插图清单: false,
   附表清单: false,
   符号说明: none,
-) = context {
-  counter(page).update(1)
+) = {
   if 中文摘要 != none {
     [
       #heading(level: 1)[摘#h(1em)要]
@@ -766,8 +808,6 @@
   }
 
   twoside-section-pagebreak()
-
-  counter(page).update(1)
 }
 
 // 参考文献样式
