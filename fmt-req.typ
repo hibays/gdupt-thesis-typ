@@ -816,7 +816,7 @@
 #let bibliography-page(
   bibfunc: none,
   full: false,
-) = context {
+) = {
   twoside-section-pagebreak()
 
   show bibliography: set text(font: TimeSimSun, size: 字号.五号) // 五号宋体
