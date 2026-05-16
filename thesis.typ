@@ -187,7 +187,7 @@ $
     &+ nabla_k f_(i j) nabla^k f^(i j) + f^(i j) f^k [2 nabla_i R_(j k) - nabla_k R_(i j)]).
 $
 
-如果要使用LaTex的公式语法，可以借助 `mitex` 包，它将LaTeX代码处理成抽象语法树（AST）。然后将 AST 转换为 Typst 代码，并使用 `eval` 函数将代码评估为 Typst 内容。具体使用方法如下：
+如果要使用LaTeX的公式语法，可以借助 `mitex` 包，它将LaTeX代码处理成抽象语法树（AST）。然后将 AST 转换为 Typst 代码，并使用 `eval` 函数将代码评估为 Typst 内容。具体使用方法如下：
 
 #import "@preview/mitex:0.2.7": mi, mitex
 #mitex(
