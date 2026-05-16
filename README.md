@@ -1,6 +1,6 @@
 # 广东石油化工学院毕业论文模板
 
-使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的毕业论文 **PDF/SVG/PNG/HTML**。
+使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的毕业论文 **PDF/SVG/PNG**。
 
 <div style="width: 100%; max-width: 800px; margin: 0 auto;">
   <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; height: auto; border-radius: 3px;" />
