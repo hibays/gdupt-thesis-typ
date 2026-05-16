@@ -1,6 +1,6 @@
 # 广东石油化工学院毕业论文模板
 
-使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的毕业论文 **PDF/SVG/PNG**。
+使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的毕业论文 **PDF/SVG/PNG/HTML**。
 
 <div style="width: 100%; max-width: 800px; margin: 0 auto;">
   <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; height: auto; border-radius: 3px;" />
@@ -17,7 +17,7 @@
 
 欢迎对 Typst 感兴趣的同学参与项目维护，提交 Issue 或 Pull Request，添加更多 features
 
-若有 Typst 使用问题（或者想交流 LaTex/论文编写），请加广油学位论文 Typst 模板交流 QQ 群捏：1105729905
+若有 Typst 使用问题（或者想交流 LaTex/论文编写），请加广油学位论文 Typst 模板交流 QQ 群捏：**1105729905**
 
 ## ✨ 特性
 
@@ -211,6 +211,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 |优先级|类型|项目|
 |-|-|-|
 |LOW|IMPL|边框表格续表不正确|
+|LOW|THIEDPARTY|导出为html时因equate包的实现问题导致公式被忽略，导致公式引用报错|
 
 ## 📚 学习资源
 
