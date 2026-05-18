@@ -1,4 +1,6 @@
-# 广东石油化工学院毕业论文模板
+<p align="center"><a href="https://github.com/hibays/gdupt-thesis-typ" target="_blank"><img width="300" src="assets/header.png" alt="GDUPT logo"></a></p>
+
+<h1 align="center">广东石油化工学院毕业论文模板</h1>
 
 使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的毕业论文 **PDF/SVG/PNG/HTML**。
 
@@ -12,6 +14,8 @@
     </div>
   </details>
 </div>
+
+---
 
 ## 🤝 欢迎 Contribute，欢迎 Communicate
 
