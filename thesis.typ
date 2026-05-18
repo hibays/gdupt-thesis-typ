@@ -1,7 +1,7 @@
 #import "fmt-req.typ": (
   acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
-  mask-pass, notation-page, paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
-  twoside-pass,
+  mask-pass, notation-page, paper-abstract, paper-cover, paper-outline, proof, pseudocode-list, subimagex, table-note,
+  tablex, theorem, twoside-pass,
 )
 
 // 盲审模式和定制双面打印模式
@@ -33,7 +33,7 @@
 #show: fmt-pass2
 #show: fmt-pass3 // 页眉
 
-#paper-up(
+#paper-abstract(
   // 中文摘要
   [
     摘要是论文内容的简要陈述，是一篇具有独立性和完整性的短文。摘要应包括本论文的基本研究内容、研究方法、创造性成果及其理论与实际意义。摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
@@ -49,9 +49,14 @@
   // 关键词
   中文关键词: ([论文内容], [创造性成果], [实际意义], [记述方法]),
   英文关键词: ([Thesis Content], [Creative Achievements], [Practical Significance], [Description Method]),
+)
+
+#paper-outline(
   插图清单: true,
   附表清单: true,
-  符号说明: [ // 如果不需要符号说明或想自定义可以删掉这项然后在pass[3,4]内用notation-page自定义或设置为 none
+  // 如果不需要符号说明可以删掉这项或设置为none；
+  // 如果要自定义删掉后在pass[3,4]内用notation-page自定义
+  符号说明: [
     #align(center, block(
       width: 60%,
       grid(

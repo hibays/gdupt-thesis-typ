@@ -117,6 +117,13 @@
   show table: set align(center)
   show figure.caption: set par(leading: 10pt, justify: false)
 
+  show list: it => {
+    show grid: it => {
+      v(200000000em)
+      it
+    }
+    it
+  }
   set list(indent: 1em, body-indent: 0.65em)
   // 设置有序列表编号：a.1.i)
   // 文件只规定了 a.1) 这种编号，i 是自拟的
@@ -216,7 +223,7 @@
   )
 
   // 显示中文字体的伪粗体和伪斜体
-  show: show-cn-fakebold
+  show: show-cn-fakebold.with(stroke: 1em / 45)
   show: show-fakeitalic
 
   // 设置代码字体
@@ -707,41 +714,12 @@
   twoside-section-pagebreak()
 }
 
-// 卷头信息样式函数
-#let paper-up(
-  中文摘要,
-  英文摘要,
-  中文关键词: (),
-  英文关键词: (),
+// 目录样式函数
+#let paper-outline(
   插图清单: false,
   附表清单: false,
   符号说明: none,
 ) = {
-  if 中文摘要 != none {
-    [
-      #heading(level: 1)[摘#h(1em)要]
-
-      #中文摘要 \
-      \
-      #if 中文关键词.len() > 0 {
-        text(font: TimeSimHei)[*关键词*：] + 中文关键词.join("；")
-      }
-    ]
-  }
-
-  if 英文摘要 != none {
-    twoside-section-pagebreak()
-    [
-      #heading(level: 1)[Abstract]
-
-      #英文摘要 \
-      \
-      #if 英文关键词.len() > 0 {
-        [*Keywords*: ] + 英文关键词.join(", ")
-      }
-    ]
-  }
-
   // 设置目录样式
   twoside-section-pagebreak()
 
@@ -805,6 +783,42 @@
   if 符号说明 != none {
     twoside-section-pagebreak()
     notation-page(title: [符号说明], 符号说明)
+  }
+
+  twoside-section-pagebreak()
+}
+
+// 中英文摘要页样式函数
+#let paper-abstract(
+  中文摘要,
+  英文摘要,
+  中文关键词: (),
+  英文关键词: (),
+) = {
+  if 中文摘要 != none {
+    twoside-section-pagebreak()
+    [
+      #heading(level: 1)[摘#h(1em)要]
+
+      #中文摘要 \
+      \
+      #if 中文关键词.len() > 0 {
+        text(font: TimeSimHei)[*关键词*：] + 中文关键词.join("；")
+      }
+    ]
+  }
+
+  if 英文摘要 != none {
+    twoside-section-pagebreak()
+    [
+      #heading(level: 1)[Abstract]
+
+      #英文摘要 \
+      \
+      #if 英文关键词.len() > 0 {
+        [*Keywords*: ] + 英文关键词.join(", ")
+      }
+    ]
   }
 
   twoside-section-pagebreak()

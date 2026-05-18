@@ -1,6 +1,7 @@
 #import "fmt-req.typ": (
   acknowledgement-page, algox, appendix, bibliography-page, fmt-pass1, fmt-pass2, fmt-pass3, fmt-pass4, imagex,
-  mask-pass, paper-cover, paper-up, proof, pseudocode-list, subimagex, table-note, tablex, theorem, twoside-pass,
+  mask-pass, paper-abstract, paper-cover, paper-outline, proof, pseudocode-list, subimagex, table-note, tablex, theorem,
+  twoside-pass,
 )
 #import "@preview/mitex:0.2.6": mi, mitex
 
@@ -33,7 +34,7 @@
 #show: fmt-pass2
 #show: fmt-pass3 // 页眉
 
-#paper-up(
+#paper-abstract(
   // 中文摘要
   [
     摘要是论文内容的简要陈述，是一篇具有独立性和完整性的短文。摘要应包括本论文的基本研究内容、研究方法、创造性成果及其理论与实际意义。摘要中不宜使用公式、图表，不标注引用文献编号。避免将摘要写成目录式的内容介绍。
@@ -51,6 +52,30 @@
   // 关键词
   中文关键词: ([论文内容], [创造性成果], [实际意义], [记述方法]),
   英文关键词: ([Thesis Content], [Creative Achievements], [Practical Significance], [Description Method]),
+)
+
+#paper-outline(
+  插图清单: true,
+  附表清单: true,
+  // 如果不需要符号说明可以删掉这项或设置为none；
+  // 如果要自定义删掉后在pass[3,4]内用notation-page自定义
+  符号说明: [
+    #align(center, block(
+      width: 60%,
+      grid(
+        align: (right, left),
+        columns: (1fr, 1.5fr),
+        row-gutter: 20pt - 0.5em,
+        column-gutter: 2em,
+        [$alpha$], [衰减系数],
+        [$beta$], [增益因子],
+        [$gamma$], [反射率],
+        [$delta$], [相位差],
+        [API], [应用程序接口 (Application Programming Interface)],
+        [GUI], [图形用户界面 (Graphical User Interface)],
+      ),
+    ))
+  ],
 )
 
 // 在 pass1234 之后开始编写论文正文
