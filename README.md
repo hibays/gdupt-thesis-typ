@@ -83,7 +83,7 @@
      和摘要信息：
 
      ```typst
-     #paper-up(
+     #paper-abstract(
          [
             这里是中文摘要内容。
          ],
@@ -93,18 +93,17 @@
          // 关键词
          中文关键词: ([关键词1], [关键词2], [关键词3], [关键词4], [关键词5]),
          英文关键词: ([kw1], [kw2], [kw3], [kw4], [kw5]),
-         尾随空页: false,
          )
      ```
 
 5. （可选）在 `thesis.typ` 文件头部配置盲审模式和双面打印模式：
 
    ```typst
-   // 启用盲审模式（用灰框遮蔽个人信息）
+   // 启用盲审模式（用灰框替换个人信息）
    #show: mask-pass.with(enable: true)
 
-   // 启用双面打印模式（自动加入空白页占位）
-   #show: twoside-pass.with(enable: true, full: false)
+   // 启用双面打印模式（自动加入空白页占位，支持自定义）
+   #show: twoside-pass.with(enable: true)
    ```
 
 6. 按下 Tab 栏右上角的预览键即可打开实时预览
