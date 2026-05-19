@@ -17,16 +17,28 @@
 
 ---
 
+> [!IMPORTANT]
+>
+> 非官方模板，存在不被学校认可的风险。
+>
+> 虽已尽力尝试复刻 Word 模板，但还是可能有半毫米左右的差距，或存在其他格式问题。
+>
+> 作者目前大一，不会 Word 也不会 $\LaTeX$，了解到 Typst 之后用来做课设论文发现效果不错，故萌生做毕业论文模板的想法，对毕业论文具体写作流程不甚清楚，对使用本模板造成的损失概不负责，使用需谨慎。
+>
+> Typst 是一个仍在活跃开发、可能会有较大变更的排版工具，请选择最新版模板与最新的 Typst 版本。
+
 ## 🤝 欢迎 Contribute，欢迎 Communicate
 
 欢迎对 Typst 感兴趣的同学参与项目维护，提交 Issue 或 Pull Request，添加更多 features
 
-若有 Typst 使用问题（或者想交流 LaTex/论文编写），请加广油学位论文 Typst 模板交流 QQ 群捏：**1105729905**
+若有 Typst 使用问题（或者想交流 $\LaTeX$/论文编写），请加广油学位论文 Typst 模板交流 QQ 群捏：**1105729905**
+
+---
 
 ## ✨ 特性
 
-- **符合学校规范**：参考 [官方 Word 文档](https://jwb.gdupt.edu.cn/info/1057/10126.htm) 开发，高度对齐学校格式要求
-- **现代化排版**：使用 Typst 现代排版系统，编译速度快，语法简洁
+- **符合学校规范**：参考 [官方 Word 文档](https://jwb.gdupt.edu.cn/info/1057/10126.htm) 进行复刻，高度对齐学校格式要求
+- **现代化排版**：使用 Typst 现代排版系统，实时编译，语法简洁
 - **实时预览**：支持 VS Code 实时编辑、预览和双向跳转
 - **完整功能**：
    1. 封面
@@ -36,7 +48,7 @@
    5. 插图清单（必要时）
    6. 附表清单（必要时）
    7. 符号说明（必要时）
-   8. 图表、公式、定理、算法、代码等
+   8. 图表、公式、定理、算法、代码、列表等
    9. 参考文献
    10. 致谢
    11. 附录（必要时）
@@ -176,7 +188,7 @@
 
 - ✅ **表格**：`tablex` 三线表环境，支持续表和脚注
 - ✅ **图片**：`imagex` 插图环境，支持子图和双语图题
-- ✅ **公式**：支持输入 Typst 公式或 LaTeX 公式（基于 `mitex`）
+- ✅ **公式**：支持输入 Typst 公式或 $\LaTeX$ 公式（基于 `mitex`）
 - ✅ **算法**：算法环境，支持跨页续算法
 - ✅ **代码**：代码高亮显示
 - ✅ **定理证明**：定理和证明环境
@@ -225,14 +237,14 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 - [面向 Word 用户的快速入门](https://typst.dev/guide/word.html)（推荐看这个）
 - [Typst 中文 FAQ](https://typst.dev/guide/FAQ.html)
   - [如何修改公式里的中文字体？](https://typst.dev/guide/FAQ/equation-chinese-font.html)
-  - [怎么把 cal 字体变成 LaTeX 里 mathcal 默认的那种？](https://typst.dev/guide/FAQ/mathcal_font.html)
+  - [怎么把 cal 字体变成 $\LaTeX$ 里 mathcal 默认的那种？](https://typst.dev/guide/FAQ/mathcal_font.html)
   - [如何让几个汉字占固定宽度并均匀分布？](https://typst.dev/guide/FAQ/character-intersperse.html)
   - [中英文下划线错位了怎么办？](https://typst.dev/guide/FAQ/underline-misplace.html)
   - [为什么下划线不显示？](https://typst.dev/guide/FAQ/underline-not-display.html)
 
 ### 数学公式
 
-- [《本科生 LaTeX 数学》的 Typst 中文版](https://github.com/tzhtaylor/typst-undergradmath-zh)
+- [《本科生 $\LaTeX$ 数学》的 Typst 中文版](https://github.com/tzhtaylor/typst-undergradmath-zh)
 
 ### 第三方包
 
@@ -240,7 +252,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 ## ❓ 常见问题
 
-### Q: 我不会 LaTeX/编程，能用这个模板吗？
+### Q: 我不会 $\LaTeX$ 也不会编程，能用这个模板吗？
 
 **A:** 完全可以！Typst 语法类似 Markdown，非常容易上手。你只需要按照模板中的示例填写内容即可。
 
@@ -250,7 +262,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 ### Q: 为什么只有一个 thesis.typ 文件？
 
-**A:** Typst 编译速度极快，大纲跳转方便，无需像 LaTeX 那样分节来加速编译，同时语法噪音小，便于查看，单文件也便于管理和同步。
+**A:** Typst 编译速度极快，大纲跳转方便，无需像 $\LaTeX$ 那样分节来加速编译，同时语法噪音小，便于查看，单文件也便于管理和同步。
 
 ### Q: AI或者智能体能写Typst论文吗？
 
@@ -281,6 +293,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 - [modern-sjtu-thesis](https://github.com/sjtug/modern-sjtu-thesis) - 上海交通大学 Typst 论文模板
 - [modern-nju-thesis](https://github.com/nju-lug/modern-nju-thesis) - 南京大学 Typst 论文模板
 - [Typst 中文社区](https://typst-doc-cn.github.io/) - 提供中文文档和疑难解答支持
+- [Typst 非官方中文交流群](https://typst-doc-cn.github.io/docs/community/) - 感谢群佬的各种疑难解答
 - [小红书上的毕业论文模板](https://www.xiaohongshu.com/explore/69a1792d000000002202ef79?xsec_token=AB5LjaTLAU7_mODiEvcdiDgMm1CfJG_gyJDyKjrzckKK0=&xsec_source=pc_search&source=web_search_result_notes) - 提供毕业论文格式的参考
 
 ## 📄 许可证
