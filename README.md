@@ -2,7 +2,7 @@
 
 <h1 align="center">GDUPT 毕业论文模板</h1>
 
-使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校格式要求的毕业论文 **PDF/SVG/PNG/HTML**。
+使用 [Typst](https://typst.app/) /taɪpst/ 编写的**非官方**广东石油化工学院（Gdupt）毕业论文（设计）模板，能够简洁、快速、持续生成符合学校[官方 Word 文档](https://jwb.gdupt.edu.cn/info/1057/10126.htm)要求的毕业论文 **PDF/SVG/PNG/HTML**。
 
 <div style="width: 100%; max-width: 800px; margin: 0 auto;">
   <img src="docs/cover_and_pro.webp" alt="cover_and_pro" style="width: 100%; height: auto; border-radius: 3px;" />
@@ -15,13 +15,11 @@
   </details>
 </div>
 
----
-
 > [!IMPORTANT]
 >
 > 非官方模板，存在不被学校认可的风险。
 >
-> 虽已尽力尝试复刻 Word 模板，但还是可能有半毫米左右的差距，或存在其他格式问题。
+> 虽已尽力尝试复刻 Word 模板（通过叠加官方 Word 导出的 PDF 进行微调），但因 Word 和 Typst 排版模型差异，还是可能存在部分页边距、页脚、标题间距等格式问题。
 >
 > 作者目前大一，不会 Word 也不会 $\LaTeX$，了解到 Typst 之后用来做课设论文发现效果不错，故萌生做毕业论文模板的想法，对毕业论文具体写作流程不甚清楚，对使用本模板造成的损失概不负责，使用需谨慎。
 >
