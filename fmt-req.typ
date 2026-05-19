@@ -3,6 +3,7 @@
   algox, appendix, equate, i-figured, imagex, proof, pseudocode-list, show-theorion, subimagex, table-note, tablex,
   theorem,
 )
+#import "@preview/cjk-spacer:0.2.1": cjk-spacer
 #import "@preview/numbly:0.1.0": numbly
 #import "@preview/cuti:0.4.0": show-cn-fakebold, show-cn-fakeitalic, show-fakebold, show-fakeitalic
 #import "@preview/wordometer:0.1.5": utils as wordometer_utils
@@ -117,18 +118,24 @@
   show table: set align(center)
   show figure.caption: set par(leading: 10pt, justify: false)
 
+  // HACK: list/enum only level 1 indent（See Issue #5998）work v0.14.2
+  // 无序列表
+  let list-enum-first-indent = 1.5em
+  let list-indent = 1em
+  let enum-indent = 0.83em
+  set list(indent: list-enum-first-indent + list-indent, body-indent: 0.65em)
   show list: it => {
-    show grid: it => {
-      v(200000000em)
-      it
-    }
+    set list(indent: list-indent)
     it
   }
-  set list(indent: 1em, body-indent: 0.65em)
   // 设置有序列表编号：a.1.i)
   // 文件只规定了 a.1) 这种编号，i 是自拟的
   set enum(numbering: "a.1.i)")
-  set enum(indent: 0.83em, body-indent: 0.45em)
+  set enum(indent: list-enum-first-indent + enum-indent, body-indent: 0.45em)
+  show enum: it => {
+    set enum(indent: enum-indent)
+    it
+  }
 
   // 如果希望单数字则自己改 i-figured 的源码
   show heading: i-figured.reset-counters.with(extra-kinds: (
@@ -225,6 +232,9 @@
   // 显示中文字体的伪粗体和伪斜体
   show: show-cn-fakebold.with(stroke: 1em / 45)
   show: show-fakeitalic
+
+  // 用于改善排版CJK文字时字符间距的包
+  show: cjk-spacer
 
   // 设置代码字体
   show raw: set text(
