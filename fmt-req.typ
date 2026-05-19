@@ -261,8 +261,8 @@
   // Word的行距在Typst相当于 leading - text.size = 20pt-1em
   // 但经过严格对齐（用尺子量）得出上面计算出这个行距是有差别的，正确的应该是20pt-0.81em
   // 文档：https://typst.app/docs/reference/model/par/#leading 和 中文FAQ
-  set par(leading: 20pt - 0.81em) // 行距
-  set par(spacing: 20pt - 0.81em) // 段距
+  set par(leading: 23.9pt - 1em) // 行距
+  set par(spacing: 23.9pt - 1em) // 段距
   set par(justify: true) // 设置段落两端对齐
 
   // 设置标题自动编号格式（for cover part）
@@ -286,7 +286,7 @@
       }
     }
     set align(center)
-    set block(above: 2em, below: 2em)
+    set block(below: 1.7em)
     set text(font: TimeSimHei, size: 字号.三号, weight: "bold")
     v(1.3em)
     it
@@ -295,7 +295,7 @@
   show heading.where(level: 2): it => {
     // 正文第二级标题
     // 小三黑体，靠左上下空一行
-    set block(above: 2em, below: 2em)
+    set block(above: 1.7em, below: 2em)
     set text(font: TimeSimHei, size: 字号.小三, weight: "regular")
     it
   }
@@ -497,7 +497,8 @@
     职称 = block * 3
   }
   set align(left)
-  text(size: 字号.小五)[#h(49em * 0.53)]
+  v(1em)
+  text(size: 字号.小五)[#h(53.1em * 0.5)]
   text(size: 字号.四号)[
     #if 仅显示下划线 {
       [学号：*#underline([\u{20}] * 12 * 2)*]
@@ -513,18 +514,19 @@
     #image("assets/header.png", height: 1.83cm, width: 9.69cm)
 
     // 手搓的调整距离
-    #v(1.85em)
+    #v(2.1em)
     // 一个28磅的换行
     #set text(size: 28pt)
     #linebreak()
   ]
 
   align(center)[
-    #set text(size: 40pt, weight: "bold", font: TimeSimHei, tracking: 6pt) // 40磅黑体加黑居中
-    #大标题
+    #set par(justify: true)
+    #set text(size: 40pt, weight: "bold", font: TimeSimHei, tracking: 8pt) // 40磅黑体加黑居中
+    #move(dx: -14pt, 大标题)
 
     // 调整距离
-    #v(137pt)
+    #v(3.61em)
   ]
 
   // 设置中文题目状态，用于页眉等
@@ -542,7 +544,7 @@
     if 显示下划线 {
       [
         // See: https://typst.dev/guide/FAQ/underline-misplace.html
-        #set underline(offset: offset + .15em, stroke: .05em, evade: false, extent: extent)
+        #set underline(offset: offset + .2em, stroke: .05em, evade: false, extent: extent)
         #underline(it)
       ]
     } else {
@@ -552,11 +554,10 @@
 
   align(center)[
     #set text(size: 字号.小二, weight: "bold", font: TimeSimHei, tracking: 2pt) // 小二号黑体加黑居中
-    #set par(leading: 1em)
+    #set par(leading: 1em, spacing: 1em)
+    #v(-0.6em)
 
     #underline-warpper(中文题目)
-
-    #text(size: 字号.五号, linebreak())
 
     #underline-warpper(英文题目)
   ]
@@ -625,7 +626,7 @@
           offset: 1em * (max(cjk_len(cjk-text), cjk-width) - cjk-width) / max(cjk_len(cjk-text), cjk-width) / 2.5,
         ))
       }
-      place(left + bottom, dx: -8pt, dy: -字号.五号 * 4.5)[
+      place(left + bottom, dx: -10pt, dy: -字号.五号 * 4.29)[
         #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
 
         #grid(
@@ -695,6 +696,7 @@
 
   // 诚信承诺保证书
   twoside-section-pagebreak()
+  v(7.7pt)
   align(center)[
     #set text(size: 字号.三号, weight: "bold", font: TimeSimHei) // 三号黑体加粗
     #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
@@ -706,24 +708,20 @@
 
   {
     set text(size: 字号.三号, lang: "zh", font: TimeFanSun)
-    set par(leading: 1em) // 行距
-    set par(spacing: 1em) // 段距
+    set par(leading: 31pt - 1em) // 行距
+    set par(spacing: 31pt - 1em) // 段距
     set par(justify: true) // 设置段落两端对齐
     set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
 
     h(0.5em)
     [
-      本人郑重承诺：《#中文题目》#大标题\u{200b}的内容真实、可靠，是本人在 #指导教师 的指导下，独立进行研究所完成。#大标题\u{200b}中引用他人已经发表或未发表的成果、数据、观点等，均已明确注明出处，如果存在弄虚作假、抄袭、剽窃的情况，本人愿承担全部责任。
+      本人郑重承诺：《#中文题目》#大标题\u{200b}的内容真实、可靠，是本人在 #h(1em)#指导教师#h(1em) 指导教师的指导下，独立进行研究所完成。#大标题\u{200b}中引用他人已经发表或未发表的成果、数据、观点等，均已明确注明出处，如果存在弄虚作假、抄袭、剽窃的情况，本人愿承担全部责任。
     ]
-    linebreak()
-    linebreak()
-    linebreak()
-    linebreak()
-    linebreak()
+    v(7.85em)
 
     // 签和年对齐
-    align(right)[学生签名：#h(7em)]
-    align(right)[年#h(2em)月#h(2em)日#h(3em)]
+    align(right)[学生签名：#h(6em)]
+    align(right)[年#h(2em)月#h(2em)日#h(2.45em)]
   }
 
   twoside-section-pagebreak()
@@ -746,13 +744,13 @@
     //weight: "semibold",
   )
   // show outline.entry.where(level: 1): set block(above: 1.25em, below: 1em)
-  let _outline_par_size = 0.75em
+  let _outline_par_size = 0.74em
   show outline.entry.where(level: 1): set block(above: _outline_par_size)
   show outline.entry.where(level: 2): set block(above: _outline_par_size)
   show outline.entry.where(level: 3): set block(above: _outline_par_size)
 
   outline(
-    title: [目#h(1em)录],
+    title: [#v(0.3em)目#h(1em)录],
     indent: 2em,
     depth: 3,
   )
@@ -785,19 +783,19 @@
   // 插图清单
   if 插图清单 {
     twoside-section-pagebreak()
-    i-figured.outline(title: [插图清单], target-kind: "image")
+    i-figured.outline(title: [#v(0.3em)插图清单], target-kind: "image")
   }
 
   // 附表清单
   if 附表清单 {
     twoside-section-pagebreak()
-    i-figured.outline(title: [附表清单], target-kind: "table")
+    i-figured.outline(title: [#v(0.3em)附表清单], target-kind: "table")
   }
 
   // 符号说明/缩略词等汇集表
   if 符号说明 != none {
     twoside-section-pagebreak()
-    notation-page(title: [符号说明], 符号说明)
+    notation-page(title: [#v(0.3em)符号说明], 符号说明)
   }
 
   twoside-section-pagebreak()
@@ -810,13 +808,16 @@
   中文关键词: (),
   英文关键词: (),
 ) = {
+  set par(leading: 24.1pt - 1em) // 行距
+  set par(spacing: 24.1pt - 1em) // 段距
   if 中文摘要 != none {
     twoside-section-pagebreak()
     [
       #heading(level: 1)[摘#h(1em)要]
+      #v(-0.4em)
+      #中文摘要
 
-      #中文摘要 \
-      \
+      #linebreak()
       #if 中文关键词.len() > 0 {
         text(font: TimeSimHei)[*关键词*：] + 中文关键词.join("；")
       }
@@ -827,9 +828,10 @@
     twoside-section-pagebreak()
     [
       #heading(level: 1)[Abstract]
+      #v(-0.4em)
+      #英文摘要
 
-      #英文摘要 \
-      \
+      #linebreak()
       #if 英文关键词.len() > 0 {
         [*Keywords*: ] + 英文关键词.join(", ")
       }
