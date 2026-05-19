@@ -156,14 +156,12 @@
 ```sh
 .
 ├── thesis.typ          # 主论文文件（在此编写内容）
-├── fmt-req.typ         # 格式要求和样式定义
+├── fmt-req.typ         # 主格式要求和样式定义（更新时直接替换本文件）
 ├── refs.bib            # 参考文献数据库（BibTeX 格式）
 ├── structure.typ       # 论文Word模板复现文件
 ├── assets/             # 图片资源（校徽、题字等）
-│   └── header.png      # 学校名书法图片
-├── figures/            # 论文图表
-│   ├── fig-xxx.png     # 图表 xxx
-│   └── ...
+├── figures/            # 论文图表 xxx （有几个 example 图表）
+├── extra/              # 额外模板如：任务书、选题表、开题报告等
 └── docs/               # README 展示图片
 ```
 
@@ -180,6 +178,7 @@
 - ✅ **符号说明（必要时）**：符号说明支持
 - ✅ **页眉页脚**：符合学校规范的奇偶页眉页脚
 - ✅ **参考文献**：支持 BibTeX 格式和文内引用，建议使用Zotero等文献管理软件
+- ✅ **致谢**：支持在盲审模式下自动删除致谢内容
 - ✅ **附录（必要时）**：附录章节支持
 
 ### 内容元素
@@ -223,8 +222,10 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 |优先级|类型|项目|
 |-|-|-|
-|LOW|IMPL|边框表格续表不正确|
+|HIGH|FUNC/STYLE|实现封面个人信息在学院/专业名太长三行不够显示时按照惯例自动切换四行显示|
+|MEDIUM|IMPL|边框表格续表不正确|
 |LOW|THIEDPARTY|导出为html时因equate包的实现问题导致公式被忽略，导致公式引用报错|
+|LOW|STYLE|为了脚注不错位页码垂直高度相较Word模板偏矮|
 
 ## 📚 学习资源
 
@@ -292,6 +293,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 - [modern-nju-thesis](https://github.com/nju-lug/modern-nju-thesis) - 南京大学 Typst 论文模板
 - [Typst 中文社区](https://typst-doc-cn.github.io/) - 提供中文文档和疑难解答支持
 - [Typst 非官方中文交流群](https://typst-doc-cn.github.io/docs/community/) - 感谢群佬的各种疑难解答
+- [BIT-Typst-Template](https://github.com/Ri-Nai/BIT-Typst-Template) - BIT 本科毕业设计（论文）模板
 - [小红书上的毕业论文模板](https://www.xiaohongshu.com/explore/69a1792d000000002202ef79?xsec_token=AB5LjaTLAU7_mODiEvcdiDgMm1CfJG_gyJDyKjrzckKK0=&xsec_source=pc_search&source=web_search_result_notes) - 提供毕业论文格式的参考
 
 ## 📄 许可证

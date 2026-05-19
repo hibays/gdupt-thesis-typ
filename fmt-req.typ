@@ -11,9 +11,14 @@
 // 定义应用Times New Roman的SimSun字体
 #let TimeSimSun = ("Times New Roman", "SimSun")
 #let TimeSimHei = ("Times New Roman", "SimHei")
-#let TimeFanSun = ("Times New Roman", "FangSong") // 仿宋_GB2312
+// 仿宋 GB2312
+#let TimeFanSun = ("Times New Roman", "FangSong")
+#let TimeKaiti = ("Times New Roman", "Kaiti")
 // 定义代码字体（等宽是等宽字体，CJK 是中文字体）
-#let CodeFont = (等宽: "DejaVu Sans Mono", CJK: "Noto Sans CJK SC")
+#let CodeFont = (
+  等宽: ("DejaVu Sans Mono", "SimSun"),
+  CJK: ("Noto Sans CJK SC", "SimSun"),
+)
 
 #let 字号 = (
   初号: 42pt,
@@ -239,8 +244,8 @@
   // 设置代码字体
   show raw: set text(
     font: (
-      (name: CodeFont.等宽, covers: "latin-in-cjk"),
-      CodeFont.CJK,
+      ..(for font in (CodeFont.等宽) { ((name: font, covers: "latin-in-cjk"),) }),
+      ..CodeFont.CJK,
     ),
     size: 字号.五号,
   )
