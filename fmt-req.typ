@@ -851,6 +851,8 @@
   twoside-section-pagebreak()
 
   show bibliography: set text(font: TimeSimSun, size: 字号.五号) // 五号宋体
+  show bibliography: set par(leading: 23.7pt - 1em) // 行距
+  show bibliography: set par(spacing: 23.7pt - 1em) // 段距
 
   {
     set heading(supplement: [引文])
