@@ -227,8 +227,6 @@
     margin: (left: 3.18cm, right: 3.18cm, top: 2.54cm, bottom: 2.54cm), // 封面页和承诺书的页边距
     numbering: none, // 开头页不编号页码
     number-align: center + bottom, // 底端居中
-    header-ascent: 15%,
-    footer-descent: 15%,
   )
 
   // 显示中文字体的伪粗体和伪斜体
@@ -259,7 +257,7 @@
   set par(first-line-indent: (amount: 2em, all: true)) // 段落首行缩进
   // 行距：全文固定值20磅=段间距
   // Word的行距在Typst相当于 leading - text.size = 20pt-1em
-  // 但经过严格对齐（用尺子量）得出上面计算出这个行距是有差别的，正确的应该是20pt-0.81em
+  // HACK: 但是和 Word 对齐时发现误差很大，所以只能设置成魔法值
   // 文档：https://typst.app/docs/reference/model/par/#leading 和 中文FAQ
   set par(leading: 23.9pt - 1em) // 行距
   set par(spacing: 23.9pt - 1em) // 段距
@@ -286,9 +284,10 @@
       }
     }
     set align(center)
+    // 章题必位于页首，block.above 被折叠故干脆不设置
     set block(below: 1.7em)
     set text(font: TimeSimHei, size: 字号.三号, weight: "bold")
-    v(1.3em)
+    v(0.7em)
     it
   }
 
@@ -303,7 +302,7 @@
   show heading.where(level: 3): it => {
     // 正文第三级标题
     // 四号黑体，靠左本身不空行
-    set block(above: 0.9em, below: 0.9em)
+    set block(above: 0.9em, below: 1em)
     set text(font: TimeSimHei, size: 字号.四号, weight: "regular")
     it
   }
@@ -311,7 +310,7 @@
   show heading.where(level: 4): it => {
     // 正文第四级标题
     // 文件没有规定，手动设置一个：小四号黑体，靠左本身不空行
-    set block(above: 0.9em, below: 0.9em)
+    set block(above: 0.9em, below: 1em)
     set text(font: TimeSimHei, size: 字号.小四, weight: "regular")
     it
   }
@@ -333,7 +332,11 @@
   // 页边距：严格统一为上2.8cm，下2.2cm，左2.8cm，右2.2cm
   set page(
     paper: "a4",
-    margin: (left: 2.8cm, right: 2.2cm, top: 2.8cm, bottom: 2.2cm),
+    margin: (left: 2.8cm, right: 2.2cm, top: 2.8cm + 0.32cm, bottom: 2.2cm),
+    // HACK: 按理来说margin.top: 2.8cm和header-ascent: 15%是很对齐的，但是后面段启空间相比 Word 会小，故微调
+    header-ascent: 23.5%,
+    // HACK: 如果设置成 -10% 可以和 Word 的页码高度对齐，但是会和脚注错位，页码矮一点问题不大，故保留 Typst 默认设置
+    // footer-descent: 15%,
     // 使用罗马数字编号页码
     numbering: "I",
     footer: context {
@@ -851,8 +854,9 @@
   twoside-section-pagebreak()
 
   show bibliography: set text(font: TimeSimSun, size: 字号.五号) // 五号宋体
-  show bibliography: set par(leading: 23.7pt - 1em) // 行距
-  show bibliography: set par(spacing: 23.7pt - 1em) // 段距
+  // HACK: 参考文献的行间距是魔法值
+  show bibliography: set par(leading: 23pt - 1em) // 行距
+  show bibliography: set par(spacing: 23.9pt - 1em) // 段距
 
   {
     set heading(supplement: [引文])
