@@ -65,7 +65,9 @@
 
 // 双面打印节断页：根据*官方的文档要求*，在节之间自动加入占位页（有页眉页脚）占位，使内容页于右侧纸开始
 #let twoside-section-pagebreak() = context {
-  let opts = state("twoside-options").get()
+  let opts = state("twoside-options", (
+    enabled: false,
+  )).get()
   if not opts.enabled {
     pagebreak(weak: true)
     return
@@ -273,7 +275,10 @@
     // 正文第一级标题（章节）
     // 正文第一级标题用三号粗黑体，章序号采用阿拉伯数字，居中上下空一行
     context {
-      let _opts = state("twoside-options").get()
+      let _opts = state("twoside-options", (
+        enabled: false,
+        extend: false,
+      )).get()
       if _opts.enabled and _opts.extend {
         twoside-section-pagebreak()
       } else {
@@ -481,7 +486,7 @@
   let 学生 = 学生
   let 指导教师 = 指导教师
   let 职称 = 职称
-  if state("mask-options").get().enabled {
+  if state("mask-options", (enabled: false)).get().enabled {
     let block = state("mask-options").get().fill_with
     学号 = block * 8
     学院 = block * 5
@@ -1000,7 +1005,7 @@
 ) = context {
   twoside-section-pagebreak()
 
-  if state("mask-options").get().enabled {
+  if state("mask-options", (enabled: false)).get().enabled {
     return
   }
 
