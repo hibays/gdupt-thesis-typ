@@ -504,14 +504,25 @@
     指导教师 = block * 3
     职称 = block * 3
   }
+  let underline-warpper = (it, extent: 0pt, offset: 0pt) => {
+    if 显示下划线 {
+      [
+        // See: https://typst.dev/guide/FAQ/underline-misplace.html
+        #set underline(offset: offset + .2em, stroke: .05em, evade: false, extent: extent)
+        #underline(it)
+      ]
+    } else {
+      it
+    }
+  }
   set align(left)
-  v(1em)
+  v(11pt)
   text(size: 字号.小五)[#h(53.1em * 0.5)]
   text(size: 字号.四号)[
     #if 仅显示下划线 {
-      [学号：*#underline([\u{20}] * 12 * 2)*]
+      [学号：*#underline-warpper([\u{20}] * 12 * 2)*]
     } else {
-      [学号：*#underline(学号)*]
+      [学号：*#underline-warpper(学号)*]
     }
   ]
   v(字号.五号 + 9.5pt)
@@ -548,18 +559,6 @@
     author: 学生,
   )
 
-  let underline-warpper = (it, extent: 0pt, offset: 0pt) => {
-    if 显示下划线 {
-      [
-        // See: https://typst.dev/guide/FAQ/underline-misplace.html
-        #set underline(offset: offset + .2em, stroke: .05em, evade: false, extent: extent)
-        #underline(it)
-      ]
-    } else {
-      it
-    }
-  }
-
   align(center)[
     #set text(size: 字号.小二, weight: "bold", font: TimeSimHei, tracking: 2pt) // 小二号黑体加黑居中
     #set par(leading: 1em, spacing: 1em)
@@ -583,17 +582,18 @@
     // 设置行距为Word的36磅
     #set par(leading: 36pt - 1em) // 行距
     #set par(spacing: 36pt - 1em) // 段距
+    #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
 
     #if 仅显示下划线 {
-      [
-        学院 #underline([\u{20}] * 11 * 2)
-        专业 #underline([\u{20}] * 11 * 2)
-        班级 #underline([\u{20}] * 11 * 2)
+      place(left + bottom, dx: -8pt, dy: -41.9pt)[
+        学院#h(0.5em)#underline([\u{20}] * 11 * 2)
+        专业#h(0.5em)#underline([\u{20}] * 10 * 2)
+        班级#h(0.5em)#underline([\u{20}] * 11 * 2)
 
-        学生 #underline([\u{20}] * 11 * 2)
+        学生#h(0.5em)#underline([\u{20}] * 11 * 2)
         指导教师（职称）#underline([\u{20}] * 15 * 2)
 
-        起止时间 #underline([\u{20}] * 6 * 2)年#underline([\u{20}] * 3 * 2)月#underline([\u{20}] * 3 * 2)日至 #underline([\u{20}] * 6 * 2)年#underline([\u{20}] * 3 * 2)月#underline([\u{20}] * 3 * 2)日
+        起止时间#h(0.5em)#underline([\u{20}] * 6 * 2)年#underline([\u{20}] * 3 * 2)月#underline([\u{20}] * 3 * 2)日至 #underline([\u{20}] * 6 * 2)年#underline([\u{20}] * 3 * 2)月#underline([\u{20}] * 3 * 2)日
       ]
     } else {
       let distr(width: auto, body) = {
@@ -604,9 +604,9 @@
       }
       let cjk_len = it => {
         let count = wordometer_utils.extract-text(it).matches(regex("[\p{Han}]")).len()
-        count += wordometer_utils.extract-text(it).matches(regex("[\p{Latin}'’.,\-]")).len() / 2.3
-        count += wordometer_utils.extract-text(it).matches(regex("[（）]+")).len() / 1.999
-        count += wordometer_utils.extract-text(it).matches(regex("\d")).len() / 1.999
+        count += wordometer_utils.extract-text(it).matches(regex("[\p{Latin}'’.,\-]")).len() / 2
+        count += wordometer_utils.extract-text(it).matches(regex("[（）]+")).len() / 1.333
+        count += wordometer_utils.extract-text(it).matches(regex("\d")).len() / 1.5
         count += wordometer_utils.extract-text(it).matches(regex("[\u{2580}-\u{259F}]")).len() * 0.75 // block
         count
       }
@@ -634,69 +634,94 @@
           offset: 1em * (max(cjk_len(cjk-text), cjk-width) - cjk-width) / max(cjk_len(cjk-text), cjk-width) / 2.5,
         ))
       }
-      place(left + bottom, dx: -10pt, dy: -字号.五号 * 4.29)[
-        #set text(top-edge: "ascender", bottom-edge: "descender") // 接近中文习惯
+      let needs-four-lines = {
+        let college-len = cjk_len(学院)
+        let major-len = cjk_len(专业)
+        college-len > 7 or major-len > 9
+      }
+
+      place(left + bottom, dx: 22pt, dy: -字号.五号 * 4.29)[
+        #if needs-four-lines {
+          grid(
+            align: left + bottom,
+            columns: (2.3em, 9em, 2.3em, 12em),
+
+            [学院], std-info(cjk-width: 9, 学院), [专业], std-info(cjk-width: 12, 专业),
+          )
+          grid(
+            align: left + bottom,
+            columns: (2.3em, 9em, 2.3em, 12em),
+
+            [班级], std-info(cjk-width: 9, di-width: 9.5em, 班级), [学生], std-info(cjk-width: 12, 学生),
+          )
+          grid(
+            align: left + bottom,
+            columns: (8em, 17.6em),
+
+            [指导教师（职称）], std-info(cjk-width: 17.6, ZT),
+          )
+        } else {
+          grid(
+            align: left + bottom,
+            columns: (2.3em, 7em, 2.3em, 9em, 2.3em, 3em),
+
+            [学院],
+            std-info(cjk-width: 7, 学院),
+            [专业],
+            std-info(cjk-width: 9, 专业),
+            [班级],
+            std-info(cjk-width: 3, di-width: 3.5em, 班级),
+          )
+          grid(
+            align: left + bottom,
+            columns: (2.3em, 7em, 7.7em, 9em),
+
+            [学生],
+            std-info(cjk-width: 7, 学生),
+            [指导教师（职称）],
+            distr(width: 9em, underline-warpper(
+              text(size: 1em * 9 / max(cjk_len(ZT), 9), ZT),
+              extent: (9em - 1em * min(cjk_len(ZT) + 0.5, 9)) / 2,
+              offset: 1em * (max(cjk_len(ZT), 9) - 9) / max(cjk_len(ZT), 9) / 2.5,
+            )),
+          )
+        }
 
         #grid(
-          align: center + bottom,
-          [#h(2em)学院],
-          std-info(cjk-width: 7, 学院),
-          [专业],
-          std-info(cjk-width: 8, 专业),
-          [班级],
-          std-info(cjk-width: 2, di-width: 2.5em, 班级),
+          align: left + bottom,
+          columns: (4.3em, 3.6em, 1em, 1.8em, 1em, 1.8em, 2em, 3.6em, 1em, 1.8em, 1em, 1.8em, 1em),
 
-          columns: (4.3em, 7em, 2.3em, 1fr, 2.3em, 2.5em),
-        )
-        #grid(
-          align: center + bottom,
-          [#h(2em)学生],
-          std-info(cjk-width: 7, 学生),
-          [指导教师（职称）],
-          distr(width: 9em, underline-warpper(
-            text(size: 1em * 9 / max(cjk_len(ZT), 9), ZT),
-            extent: (9em - 1em * min(cjk_len(ZT) + 0.5, 9)) / 2,
-            offset: 1em * (max(cjk_len(ZT), 9) - 9) / max(cjk_len(ZT), 9) / 2.5,
-          )),
-
-          columns: (4.3em, 7em, 7.3em, 1fr),
-        )
-
-        #grid(
-          align: center + bottom,
-          [#h(2em)起止时间],
+          [起止时间],
           underline-warpper(
-            str(启动时间.year()),
+            align(center)[#str(启动时间.year())],
             extent: ((2.7em - 1em * str(启动时间.year()).len() * 0.3) / 2),
           ),
           [年],
           underline-warpper(
-            str(启动时间.month()),
+            align(center)[#str(启动时间.month())],
             extent: ((1.5em - 1em * str(启动时间.month()).len() * 0.3) / 2),
           ),
           [月],
           underline-warpper(
-            str(启动时间.day()),
+            align(center)[#str(启动时间.day())],
             extent: ((1.5em - 1em * str(启动时间.day()).len() * 0.3) / 2),
           ),
           [日至],
           underline-warpper(
-            str(结束时间.year()),
+            align(center)[#str(结束时间.year())],
             extent: ((2.7em - 1em * str(结束时间.year()).len() * 0.3) / 2),
           ),
           [年],
           underline-warpper(
-            str(结束时间.month()),
+            align(center)[#str(结束时间.month())],
             extent: ((1.5em - 1em * str(结束时间.month()).len() * 0.3) / 2),
           ),
           [月],
           underline-warpper(
-            str(结束时间.day()),
+            align(center)[#str(结束时间.day())],
             extent: ((1.5em - 1em * str(结束时间.day()).len() * 0.3) / 2),
           ),
           [日],
-
-          columns: (6.3em, 3.6em, 1em, 1.8em, 1em, 1.8em, 2em, 3.6em, 1em, 1.8em, 1em, 1.8em, 1em),
         )
       ]
     }

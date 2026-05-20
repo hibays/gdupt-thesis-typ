@@ -222,7 +222,6 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 |优先级|类型|项目|
 |-|-|-|
-|HIGH|FUNC/STYLE|实现封面个人信息在学院/专业名太长三行不够显示时按照惯例自动切换四行显示|
 |MEDIUM|IMPL|边框表格续表不正确|
 |LOW|THIEDPARTY|导出为html时因equate包的实现问题导致公式被忽略，导致公式引用报错|
 |LOW|STYLE|为了脚注不错位页码垂直高度相较Word模板偏矮|
