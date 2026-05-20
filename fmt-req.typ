@@ -13,7 +13,7 @@
 #let TimeSimHei = ("Times New Roman", "SimHei")
 // 仿宋 GB2312
 #let TimeFanSun = ("Times New Roman", "FangSong")
-#let TimeKaiti = ("Times New Roman", "Kaiti")
+#let TimeKaiTi = ("Times New Roman", "Kaiti")
 // 定义代码字体（等宽是等宽字体，CJK 是中文字体）
 #let CodeFont = (
   等宽: ("DejaVu Sans Mono", "SimSun"),
