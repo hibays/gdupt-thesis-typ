@@ -288,6 +288,7 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 本模板基于以下优秀项目开发：
 
+- [我油尖端的逐梦LAB老师兄](https://github.com/) - 更新师兄无私提供的各种毕业论文格式的Word模板要求、范例参考和实际使用上的大量指导性意见
 - [modern-sjtu-thesis](https://github.com/sjtug/modern-sjtu-thesis) - 上海交通大学 Typst 论文模板
 - [modern-nju-thesis](https://github.com/nju-lug/modern-nju-thesis) - 南京大学 Typst 论文模板
 - [Typst 中文社区](https://typst-doc-cn.github.io/) - 提供中文文档和疑难解答支持

@@ -661,16 +661,18 @@
             [指导教师（职称）], std-info(cjk-width: 17.6, ZT),
           )
         } else {
+          let fit_major = min(max(cjk_len(专业) * 1.2, 6), 9)
+          let fit_class = max(9 - fit_major + 3, 3) - 0.1
           grid(
             align: left + bottom,
-            columns: (2.3em, 7em, 2.3em, 9em, 2.3em, 3em),
+            columns: (2.3em, 7em, 2.3em, fit_major * 1em, 2.3em, fit_class * 1em),
 
             [学院],
             std-info(cjk-width: 7, 学院),
             [专业],
-            std-info(cjk-width: 9, 专业),
+            std-info(cjk-width: fit_major, 专业),
             [班级],
-            std-info(cjk-width: 3, di-width: 3.5em, 班级),
+            std-info(cjk-width: fit_class, di-width: (fit_class + 0.5) * 1em, 班级),
           )
           grid(
             align: left + bottom,
