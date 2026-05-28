@@ -133,6 +133,7 @@
   set list(indent: list-enum-first-indent + list-indent, body-indent: 0.65em)
   show list: it => {
     set list(indent: list-indent)
+    set enum(indent: enum-indent)
     it
   }
   // 设置有序列表编号：a.1.i)
@@ -141,6 +142,7 @@
   set enum(indent: list-enum-first-indent + enum-indent, body-indent: 0.45em)
   show enum: it => {
     set enum(indent: enum-indent)
+    set list(indent: list-indent)
     it
   }
 
