@@ -1,0 +1,179 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Typst
+        run: |
+          curl -fsSL https://github.com/typst/typst/releases/latest/download/typst-x86_64-pc-windows-msvc.zip -o typst.zip
+          7z x typst.zip -o"typst-bin"
+          mkdir -p "$HOME/.local/bin"
+          cp typst-bin/typst-x86_64-pc-windows-msvc/typst.exe "$HOME/.local/bin/typst.exe"
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Install all required fonts
+        shell: pwsh
+        run: |
+          $FontDir = "$HOME\fonts"
+          New-Item -ItemType Directory -Force -Path $FontDir | Out-Null
+
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+          # DejaVu Sans Mono (for code blocks)
+          Write-Host "Downloading DejaVu Sans Mono..."
+          Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37_3/dejavu-fonts-ttf-2.37.3.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
+          Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37.3\ttf\DejaVuSansMono*.ttf" $FontDir
+
+          # Noto Sans CJK SC (SimHei fallback, CodeFont CJK)
+          Write-Host "Downloading Noto Sans CJK SC..."
+          Invoke-WebRequest -Uri "https://github.com/notofonts/noto-cjk/releases/download/Sans2.004/03_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\noto.zip" -DestinationPath "$env:TEMP\noto" -Force
+          Copy-Item "$env:TEMP\noto\*.ttf" $FontDir
+
+          # Noto Serif CJK SC (SimSun/FangSong fallback)
+          Write-Host "Downloading Noto Serif CJK SC..."
+          Invoke-WebRequest -Uri "https://github.com/notofonts/noto-cjk/releases/download/Serif2.002/07_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
+          Copy-Item "$env:TEMP\noto-serif\*.ttf" $FontDir
+
+          # Copy system Chinese fonts
+          Write-Host "Copying system Chinese fonts..."
+          $SysFontDir = "$env:SystemRoot\Fonts"
+          Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf","FangSong*.ttf","KaiTi*.ttf","Kaiti*.ttc" -ErrorAction SilentlyContinue |
+            Copy-Item -Destination $FontDir -Force
+
+          # If any missing, try Windows optional feature
+          $Missing = @("simsun.ttc","simhei.ttf","simfang.ttf","simkai.ttf") | Where-Object {
+            -not (Test-Path (Join-Path $FontDir $_))
+          }
+          if ($Missing.Count -gt 0) {
+            Write-Host "Missing: $($Missing -join ', '). Trying Chinese Supplemental Fonts..."
+            try {
+              $caps = Get-WindowsCapability -Online -Name "Language.Fonts.Chinese.Simplified~~*" -ErrorAction Stop
+              $cap = $caps | Select-Object -First 1
+              if ($cap -and $cap.State -ne "Installed") {
+                Add-WindowsCapability -Online -Name $cap.Name
+                Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
+                  Copy-Item -Destination $FontDir -Force
+              }
+            } catch {
+              Write-Host "Cannot install: $_"
+            }
+          }
+
+          Write-Host "`nAvailable fonts:"
+          Get-ChildItem $FontDir | ForEach-Object { Write-Host "  $($_.Name)" }
+
+      - name: Create minimal template zip (original files, unpatched)
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          7z a "gdupt_thesis_template_${VERSION}.zip" \
+            thesis.typ fmt-req.typ refs.bib \
+            assets/ figures/ extra/ .gitignore \
+            LICENSE README.md \
+            -xr!structure.typ -xr!.github
+
+      - name: Compile thesis.pdf (patch fonts if missing on runner)
+        run: |
+          FDIR="$HOME/fonts"
+          [ ! -f "$FDIR/simsun.ttc" ] && sed -i 's/"SimSun"/"Noto Serif CJK SC"/g' fmt-req.typ && echo "patch: SimSun → Noto Serif CJK SC"
+          [ ! -f "$FDIR/simhei.ttf" ] && sed -i 's/"SimHei"/"Noto Sans CJK SC"/g' fmt-req.typ && echo "patch: SimHei → Noto Sans CJK SC"
+          [ ! -f "$FDIR/simfang.ttf" ] && sed -i 's/"FangSong"/"Noto Serif CJK SC"/g' fmt-req.typ && echo "patch: FangSong → Noto Serif CJK SC"
+          [ ! -f "$FDIR/simkai.ttf" ] && sed -i 's/"Kaiti"/"Noto Sans CJK SC"/g' fmt-req.typ && echo "patch: Kaiti → Noto Sans CJK SC"
+          echo "Compiling..."
+          typst compile thesis.typ --font-path "$FDIR"
+
+      - name: Build release notes
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          TAG="${GITHUB_REF_NAME}"
+          NOTES="release-notes.md"
+          > "$NOTES"
+
+          PREV_TAG=$(git tag --sort=version:refname | grep '^v' | tail -2 | head -1)
+          [ -n "$PREV_TAG" ] && RANGE="${PREV_TAG}.." || RANGE=""
+
+          echo "# GDUPT Thesis Template $TAG" >> "$NOTES"
+          echo "" >> "$NOTES"
+
+          echo "## :clipboard: What's Changed" >> "$NOTES"
+          if [ -n "$RANGE" ]; then
+            git log "${RANGE}HEAD" --oneline --no-decorate | sed 's/^/* /' >> "$NOTES"
+          else
+            git log --oneline --no-decorate | sed 's/^/* /' >> "$NOTES"
+          fi
+          echo "" >> "$NOTES"
+
+          echo "## :busts_in_silhouette: Contributors" >> "$NOTES"
+          if [ -n "$RANGE" ]; then
+            git shortlog "${RANGE}HEAD" -sn >> "$NOTES"
+          else
+            git shortlog -sn >> "$NOTES"
+          fi
+          echo "" >> "$NOTES"
+
+          # new contributors
+          if [ -n "$RANGE" ]; then
+            mapfile -t NEWBIES < <(git shortlog "${RANGE}HEAD" -sn \
+              | awk '{$1=""; sub(/^ /,""); print}')
+            ALL_OLD=""
+            for t in $(git tag --sort=version:refname | grep '^v' | head -n-1); do
+              ALL_OLD="$ALL_OLD"$'\n'"$(git shortlog "$t" -sn \
+                | awk '{$1=""; sub(/^ /,""); print}')"
+            done
+            NEW_NAMES=""
+            for name in "${NEWBIES[@]}"; do
+              if ! grep -qFx "$name" <<< "$ALL_OLD"; then
+                NEW_NAMES+=$'\n* '"$name"
+              fi
+            done
+            if [ -n "$NEW_NAMES" ]; then
+              echo "### :new: New Contributors" >> "$NOTES"
+              echo "$NEW_NAMES" >> "$NOTES"
+              echo "" >> "$NOTES"
+            fi
+          fi
+
+          echo "## :rocket: Quick Start" >> "$NOTES"
+          echo "" >> "$NOTES"
+          echo '```' >> "$NOTES"
+          echo "typst compile thesis.typ" >> "$NOTES"
+          echo '```' >> "$NOTES"
+          echo "" >> "$NOTES"
+          echo "Edit \`thesis.typ\` to fill in your info, then compile." >> "$NOTES"
+          echo "For real-time preview, use VS Code + Tinymist extension." >> "$NOTES"
+          echo "" >> "$NOTES"
+
+          echo "## :package: Assets" >> "$NOTES"
+          echo "- \`thesis.pdf\` — Pre-compiled preview" >> "$NOTES"
+          echo "- \`gdupt_thesis_template_${VERSION}.zip\` — Source (all except \`structure.typ\`)" >> "$NOTES"
+          echo "- Source code archives (auto-generated by GitHub)" >> "$NOTES"
+          echo "" >> "$NOTES"
+          echo "## :page_facing_up: License" >> "$NOTES"
+          echo "[MIT](LICENSE)" >> "$NOTES"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: release-notes.md
+          fail_on_unmatched_files: true
+          files: |
+            thesis.pdf
+            gdupt_thesis_template_*.zip
