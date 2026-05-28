@@ -35,71 +35,71 @@ jobs:
 
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-           # ---------- open-source / 3rd-party fonts ----------
+          # ---------- open-source / 3rd-party fonts ----------
 
-           # DejaVu Sans Mono (for code blocks)
-           Write-Host "Downloading DejaVu Sans Mono..."
-           Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
-           Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
-           Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
+          # DejaVu Sans Mono (for code blocks)
+          Write-Host "Downloading DejaVu Sans Mono..."
+          Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
+          Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
 
-           # Noto Sans CJK SC / Noto Serif CJK SC (fallbacks, static OTF)
-           Write-Host "Downloading Noto Sans CJK SC..."
-           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/08_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto-sans.zip" -ErrorAction Stop
-           Expand-Archive -Path "$env:TEMP\noto-sans.zip" -DestinationPath "$env:TEMP\noto-sans" -Force
-           Copy-Item "$env:TEMP\noto-sans\*.otf" $FontDir
-           Write-Host "Downloading Noto Serif CJK SC..."
-           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Serif2.001/09_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
-           Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
-           Copy-Item "$env:TEMP\noto-serif\*.otf" $FontDir
+          # Noto Sans CJK SC / Noto Serif CJK SC (fallbacks, static OTF)
+          Write-Host "Downloading Noto Sans CJK SC..."
+          Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/08_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto-sans.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\noto-sans.zip" -DestinationPath "$env:TEMP\noto-sans" -Force
+          Copy-Item "$env:TEMP\noto-sans\*.otf" $FontDir
+          Write-Host "Downloading Noto Serif CJK SC..."
+          Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Serif2.001/09_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
+          Copy-Item "$env:TEMP\noto-serif\*.otf" $FontDir
 
-           # ---------- 源字体下载和系统字体处理 (https://github.com/hibays) ----------
+          # ---------- 源字体下载和系统字体处理 (https://github.com/hibays) ----------
 
-           # Try direct download of actual SimSun/SimHei/FangSong/KaiTi
-           $MSSource = "https://github.com/dolbydu/font/raw/master/unicode"
-           $MSFonts = @(
-             @{ File = "SimSun.ttc";  Name = "SimSun" },
-             @{ File = "SimHei.ttf";  Name = "SimHei" },
-             @{ File = "FangSong.ttf"; Name = "FangSong" },
-              @{ File = "Kaiti.ttf";   Name = "Kaiti" }
-           )
-           foreach ($f in $MSFonts) {
-             $dst = Join-Path $FontDir $f.File
-             if (-not (Test-Path $dst)) {
-               try {
-                 Invoke-WebRequest -Uri "$MSSource/$($f.File)" -OutFile $dst -ErrorAction Stop
-                 Write-Host "  [downloaded] $($f.Name)"
-               } catch {
-                 Write-Host "  [failed] $($f.Name): $_"
-               }
-             }
-           }
+          # Try direct download of actual SimSun/SimHei/FangSong/KaiTi
+          $MSSource = "https://raw.githubusercontent.com/dolbydu/font/master/unicode"
+          $MSFonts = @(
+            @{ File = "SimSun.ttc";  Name = "SimSun" },
+            @{ File = "SimHei.ttf";  Name = "SimHei" },
+            @{ File = "FangSong.ttf"; Name = "FangSong" },
+            @{ File = "Kaiti.ttf";   Name = "Kaiti" }
+          )
+          foreach ($f in $MSFonts) {
+            $dst = Join-Path $FontDir $f.File
+            if (-not (Test-Path $dst)) {
+              try {
+                Invoke-WebRequest -Uri "$MSSource/$($f.File)" -OutFile $dst -ErrorAction Stop
+                Write-Host "  [downloaded] $($f.Name)"
+              } catch {
+                Write-Host "  [failed] $($f.Name): $_"
+              }
+            }
+          }
 
-           # Try system font directory
-           Write-Host "Copying system Chinese fonts..."
-           $SysFontDir = "$env:SystemRoot\Fonts"
-           Get-ChildItem $SysFontDir -Include "SimSun*.ttc","SimHei*.ttf","FangSong*.ttf","Kaiti*.ttf","simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
-             Copy-Item -Destination $FontDir -Force
+          # Try system font directory
+          Write-Host "Copying system Chinese fonts..."
+          $SysFontDir = "$env:SystemRoot\Fonts"
+          Get-ChildItem $SysFontDir -Include "SimSun*.ttc","SimHei*.ttf","FangSong*.ttf","Kaiti*.ttf","simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
+            Copy-Item -Destination $FontDir -Force
 
-           # Try Windows optional feature as last resort
-           $Expected = @("SimSun.ttc","SimHei.ttf","FangSong.ttf","Kaiti.ttf")
-           $Missing = $Expected | Where-Object {
-             -not (Test-Path (Join-Path $FontDir $_))
-           }
-           if ($Missing.Count -gt 0) {
-             Write-Host "Still missing: $($Missing -join ', '). Trying Windows Capability..."
-             try {
-               $caps = Get-WindowsCapability -Online -Name "Language.Fonts.Chinese.Simplified~~*" -ErrorAction Stop
-               $cap = $caps | Select-Object -First 1
-               if ($cap -and $cap.State -ne "Installed") {
-                 Add-WindowsCapability -Online -Name $cap.Name
-                 Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
-                   Copy-Item -Destination $FontDir -Force
-               }
-             } catch {
-               Write-Host "Cannot install: $_"
-             }
-           }
+          # Try Windows optional feature as last resort
+          $Expected = @("SimSun.ttc","SimHei.ttf","FangSong.ttf","Kaiti.ttf")
+          $Missing = $Expected | Where-Object {
+            -not (Test-Path (Join-Path $FontDir $_))
+          }
+          if ($Missing.Count -gt 0) {
+            Write-Host "Still missing: $($Missing -join ', '). Trying Windows Capability..."
+            try {
+              $caps = Get-WindowsCapability -Online -Name "Language.Fonts.Chinese.Simplified~~*" -ErrorAction Stop
+              $cap = $caps | Select-Object -First 1
+              if ($cap -and $cap.State -ne "Installed") {
+                Add-WindowsCapability -Online -Name $cap.Name
+                Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
+                  Copy-Item -Destination $FontDir -Force
+              }
+            } catch {
+              Write-Host "Cannot install: $_"
+            }
+          }
 
           Write-Host "`nAvailable fonts:"
           Get-ChildItem $FontDir | ForEach-Object { Write-Host "  $($_.Name)" }
@@ -142,13 +142,13 @@ jobs:
           echo "# GDUPT Thesis Template $TAG" >> "$NOTES"
           echo "" >> "$NOTES"
 
-           echo "## :clipboard: What's Changed" >> "$NOTES"
-           if [ -n "$RANGE" ]; then
-             git log "${RANGE}HEAD" --format="* %h %s [@%an](https://github.com/%an)" >> "$NOTES"
-           else
-             git log --format="* %h %s [@%an](https://github.com/%an)" >> "$NOTES"
-           fi
-           echo "" >> "$NOTES"
+          echo "## :clipboard: What's Changed" >> "$NOTES"
+          if [ -n "$RANGE" ]; then
+            git log "${RANGE}HEAD" --format="* %h %s [@%an](https://github.com/%an)" >> "$NOTES"
+          else
+            git log --format="* %h %s [@%an](https://github.com/%an)" >> "$NOTES"
+          fi
+          echo "" >> "$NOTES"
 
           echo "## :rocket: Quick Start" >> "$NOTES"
           echo "" >> "$NOTES"
@@ -162,7 +162,7 @@ jobs:
 
           echo "## :package: Assets" >> "$NOTES"
           echo "- \`thesis.pdf\` — Pre-compiled preview" >> "$NOTES"
-           echo "- \`gdupt_thesis_template_${VERSION}.zip\`" >> "$NOTES"
+          echo "- \`gdupt_thesis_template_${VERSION}.zip\`" >> "$NOTES"
           echo "- Source code archives (auto-generated by GitHub)" >> "$NOTES"
           echo "" >> "$NOTES"
           echo "## :page_facing_up: License" >> "$NOTES"
