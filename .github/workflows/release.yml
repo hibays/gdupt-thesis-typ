@@ -35,23 +35,23 @@ jobs:
 
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-          # DejaVu Sans Mono (for code blocks)
-          Write-Host "Downloading DejaVu Sans Mono..."
-          Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37_3/dejavu-fonts-ttf-2.37.3.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
-          Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
-          Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37.3\ttf\DejaVuSansMono*.ttf" $FontDir
+           # DejaVu Sans Mono (for code blocks)
+           Write-Host "Downloading DejaVu Sans Mono..."
+           Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
+           Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
+           Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
 
-          # Noto Sans CJK SC (SimHei fallback, CodeFont CJK)
-          Write-Host "Downloading Noto Sans CJK SC..."
-          Invoke-WebRequest -Uri "https://github.com/notofonts/noto-cjk/releases/download/Sans2.004/03_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto.zip" -ErrorAction Stop
-          Expand-Archive -Path "$env:TEMP\noto.zip" -DestinationPath "$env:TEMP\noto" -Force
-          Copy-Item "$env:TEMP\noto\*.ttf" $FontDir
+           # Noto Sans CJK SC (SimHei fallback, CodeFont CJK)
+           Write-Host "Downloading Noto Sans CJK SC..."
+           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/08_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto.zip" -ErrorAction Stop
+           Expand-Archive -Path "$env:TEMP\noto.zip" -DestinationPath "$env:TEMP\noto" -Force
+           Copy-Item "$env:TEMP\noto\*.otf" $FontDir
 
-          # Noto Serif CJK SC (SimSun/FangSong fallback)
-          Write-Host "Downloading Noto Serif CJK SC..."
-          Invoke-WebRequest -Uri "https://github.com/notofonts/noto-cjk/releases/download/Serif2.002/07_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
-          Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
-          Copy-Item "$env:TEMP\noto-serif\*.ttf" $FontDir
+           # Noto Serif CJK SC (SimSun/FangSong fallback)
+           Write-Host "Downloading Noto Serif CJK SC..."
+           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Serif2.003/09_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
+           Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
+           Copy-Item "$env:TEMP\noto-serif\*.otf" $FontDir
 
           # Copy system Chinese fonts
           Write-Host "Copying system Chinese fonts..."
