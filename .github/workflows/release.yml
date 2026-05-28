@@ -35,23 +35,19 @@ jobs:
 
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-           # DejaVu Sans Mono (for code blocks)
-           Write-Host "Downloading DejaVu Sans Mono..."
-           Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
-           Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
-           Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
+          # DejaVu Sans Mono (for code blocks)
+          Write-Host "Downloading DejaVu Sans Mono..."
+          Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
+          Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
+          Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
 
-           # Noto Sans CJK SC (SimHei fallback, CodeFont CJK)
-           Write-Host "Downloading Noto Sans CJK SC..."
-           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/08_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto.zip" -ErrorAction Stop
-           Expand-Archive -Path "$env:TEMP\noto.zip" -DestinationPath "$env:TEMP\noto" -Force
-           Copy-Item "$env:TEMP\noto\*.otf" $FontDir
+          # Noto Sans SC (SimHei/Kaiti fallback)
+          Write-Host "Downloading Noto Sans SC..."
+          Invoke-WebRequest -Uri "https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf" -OutFile "$FontDir\NotoSansSC.ttf" -ErrorAction Stop
 
-           # Noto Serif CJK SC (SimSun/FangSong fallback)
-           Write-Host "Downloading Noto Serif CJK SC..."
-           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Serif2.003/09_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
-           Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
-           Copy-Item "$env:TEMP\noto-serif\*.otf" $FontDir
+          # Noto Serif SC (SimSun/FangSong fallback)
+          Write-Host "Downloading Noto Serif SC..."
+          Invoke-WebRequest -Uri "https://github.com/google/fonts/raw/main/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf" -OutFile "$FontDir\NotoSerifSC.ttf" -ErrorAction Stop
 
           # Copy system Chinese fonts
           Write-Host "Copying system Chinese fonts..."
@@ -93,10 +89,13 @@ jobs:
       - name: Compile thesis.pdf (patch fonts if missing on runner)
         run: |
           FDIR="$HOME/fonts"
-          [ ! -f "$FDIR/simsun.ttc" ] && sed -i 's/"SimSun"/"Noto Serif CJK SC"/g' fmt-req.typ && echo "patch: SimSun → Noto Serif CJK SC"
-          [ ! -f "$FDIR/simhei.ttf" ] && sed -i 's/"SimHei"/"Noto Sans CJK SC"/g' fmt-req.typ && echo "patch: SimHei → Noto Sans CJK SC"
-          [ ! -f "$FDIR/simfang.ttf" ] && sed -i 's/"FangSong"/"Noto Serif CJK SC"/g' fmt-req.typ && echo "patch: FangSong → Noto Serif CJK SC"
-          [ ! -f "$FDIR/simkai.ttf" ] && sed -i 's/"Kaiti"/"Noto Sans CJK SC"/g' fmt-req.typ && echo "patch: Kaiti → Noto Sans CJK SC"
+          # Patch missing system fonts → Google Fonts alternatives
+          [ ! -f "$FDIR/simsun.ttc" ] && sed -i 's/"SimSun"/"Noto Serif SC"/g' fmt-req.typ && echo "patch: SimSun → Noto Serif SC"
+          [ ! -f "$FDIR/simhei.ttf" ] && sed -i 's/"SimHei"/"Noto Sans SC"/g' fmt-req.typ && echo "patch: SimHei → Noto Sans SC"
+          [ ! -f "$FDIR/simfang.ttf" ] && sed -i 's/"FangSong"/"Noto Serif SC"/g' fmt-req.typ && echo "patch: FangSong → Noto Serif SC"
+          [ ! -f "$FDIR/simkai.ttf" ] && sed -i 's/"Kaiti"/"Noto Sans SC"/g' fmt-req.typ && echo "patch: Kaiti → Noto Sans SC"
+          # Also replace the CodeFont CJK reference (Noto Sans CJK SC → Noto Sans SC)
+          grep -q '"Noto Sans CJK SC"' fmt-req.typ && sed -i 's/"Noto Sans CJK SC"/"Noto Sans SC"/g' fmt-req.typ && echo "patch: Noto Sans CJK SC → Noto Sans SC"
           echo "Compiling..."
           typst compile thesis.typ --font-path "$FDIR"
 
@@ -113,43 +112,13 @@ jobs:
           echo "# GDUPT Thesis Template $TAG" >> "$NOTES"
           echo "" >> "$NOTES"
 
-          echo "## :clipboard: What's Changed" >> "$NOTES"
-          if [ -n "$RANGE" ]; then
-            git log "${RANGE}HEAD" --oneline --no-decorate | sed 's/^/* /' >> "$NOTES"
-          else
-            git log --oneline --no-decorate | sed 's/^/* /' >> "$NOTES"
-          fi
-          echo "" >> "$NOTES"
-
-          echo "## :busts_in_silhouette: Contributors" >> "$NOTES"
-          if [ -n "$RANGE" ]; then
-            git shortlog "${RANGE}HEAD" -sn >> "$NOTES"
-          else
-            git shortlog -sn >> "$NOTES"
-          fi
-          echo "" >> "$NOTES"
-
-          # new contributors
-          if [ -n "$RANGE" ]; then
-            mapfile -t NEWBIES < <(git shortlog "${RANGE}HEAD" -sn \
-              | awk '{$1=""; sub(/^ /,""); print}')
-            ALL_OLD=""
-            for t in $(git tag --sort=version:refname | grep '^v' | head -n-1); do
-              ALL_OLD="$ALL_OLD"$'\n'"$(git shortlog "$t" -sn \
-                | awk '{$1=""; sub(/^ /,""); print}')"
-            done
-            NEW_NAMES=""
-            for name in "${NEWBIES[@]}"; do
-              if ! grep -qFx "$name" <<< "$ALL_OLD"; then
-                NEW_NAMES+=$'\n* '"$name"
-              fi
-            done
-            if [ -n "$NEW_NAMES" ]; then
-              echo "### :new: New Contributors" >> "$NOTES"
-              echo "$NEW_NAMES" >> "$NOTES"
-              echo "" >> "$NOTES"
-            fi
-          fi
+           echo "## :clipboard: What's Changed" >> "$NOTES"
+           if [ -n "$RANGE" ]; then
+             git log "${RANGE}HEAD" --format="* %h %s (%an)" >> "$NOTES"
+           else
+             git log --format="* %h %s (%an)" >> "$NOTES"
+           fi
+           echo "" >> "$NOTES"
 
           echo "## :rocket: Quick Start" >> "$NOTES"
           echo "" >> "$NOTES"
