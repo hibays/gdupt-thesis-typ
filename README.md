@@ -19,9 +19,9 @@
 >
 > 非官方模板，存在不被学校认可的风险。
 >
-> 虽已尽力尝试复刻 Word 模板（通过叠加官方 Word 导出的 PDF 进行微调），但因 Word 和 Typst 排版模型差异，还是可能存在部分页边距、页脚、标题间距等格式问题。
+> 虽已尽力尝试复刻 Word 模板（通过叠层官方 Word 的 PDF 进行像素级微调），但因 Word 和 Typst 排版模型差异，还是可能存在页脚、标题间距等细微差异。
 >
-> 作者目前大一，不会 Word 也不会 $\LaTeX$，了解到 Typst 之后用来做课设论文发现效果不错，故萌生做毕业论文模板的想法，对毕业论文具体写作流程不甚清楚，对使用本模板造成的损失概不负责，使用需谨慎。
+> 作者目前大一，不会 Word 也不会 $\LaTeX$，了解到 Typst 之后用来做课设论文发现效果不错，故萌生做毕业论文模板的想法，但对毕业论文具体写作流程不甚清楚，对使用本模板造成的损失概不负责，使用需谨慎。
 >
 > Typst 是一个仍在活跃开发、可能会有较大变更的排版工具，请选择最新版模板与最新的 Typst 版本。
 
@@ -29,7 +29,7 @@
 
 欢迎对 Typst 感兴趣的同学参与项目维护，提交 Issue 或 Pull Request，添加更多 features
 
-若有 Typst 使用问题（或者想交流 $\LaTeX$/论文编写），请加广油学位论文 Typst 模板交流 QQ 群捏：**1105729905**
+若有 Typst 使用问题（或者想交流 $\LaTeX$/论文编写、提供流程改进建议的），请加广油学位论文 Typst 模板交流 QQ 群捏^_^：**1105729905**
 
 ---
 
@@ -288,13 +288,13 @@ See: [如何设置（中文）字体？](https://typst.dev/guide/FAQ/install-fon
 
 本模板基于以下优秀项目开发：
 
-- [我油尖端的逐梦LAB老师兄](https://github.com/) - 更新师兄无私提供的各种毕业论文格式的Word模板要求、范例参考和实际使用上的大量指导性意见
-- [modern-sjtu-thesis](https://github.com/sjtug/modern-sjtu-thesis) - 上海交通大学 Typst 论文模板
-- [modern-nju-thesis](https://github.com/nju-lug/modern-nju-thesis) - 南京大学 Typst 论文模板
+- [我油尖端的逐梦LAB老师兄](https://github.com/) - 感谢师兄无私提供的各种毕业论文Word模板、参考范例和大量实践上的指导意见
+- [modern-sjtu-thesis](https://github.com/sjtug/modern-sjtu-thesis) - 大多数内容参考继承自上海交通大学 Typst 论文模板中的实现
+- [modern-nju-thesis](https://github.com/nju-lug/modern-nju-thesis) - 南京大学 Typst 论文模板提供了gb7714-2015参考文献样式的修复实现
 - [Typst 中文社区](https://typst-doc-cn.github.io/) - 提供中文文档和疑难解答支持
 - [Typst 非官方中文交流群](https://typst-doc-cn.github.io/docs/community/) - 感谢群佬的各种疑难解答
 - [BIT-Typst-Template](https://github.com/Ri-Nai/BIT-Typst-Template) - BIT 本科毕业设计（论文）模板
-- [小红书上的毕业论文模板](https://www.xiaohongshu.com/explore/69a1792d000000002202ef79?xsec_token=AB5LjaTLAU7_mODiEvcdiDgMm1CfJG_gyJDyKjrzckKK0=&xsec_source=pc_search&source=web_search_result_notes) - 提供毕业论文格式的参考
+- [小红书上的毕业论文模板](https://www.xiaohongshu.com/explore/69a1792d000000002202ef79?xsec_token=AB5LjaTLAU7_mODiEvcdiDgMm1CfJG_gyJDyKjrzckKK0=&xsec_source=pc_search&source=web_search_result_notes) - 提供毕业论文格式的参考（不建议看，和师兄提供的差别很大）
 
 ## 📄 许可证
 
