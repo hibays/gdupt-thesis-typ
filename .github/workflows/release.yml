@@ -35,44 +35,70 @@ jobs:
 
           [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-          # DejaVu Sans Mono (for code blocks)
-          Write-Host "Downloading DejaVu Sans Mono..."
-          Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
-          Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
-          Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
+           # ---------- open-source / 3rd-party fonts ----------
 
-          # Noto Sans SC (SimHei/Kaiti fallback)
-          Write-Host "Downloading Noto Sans SC..."
-          Invoke-WebRequest -Uri "https://github.com/google/fonts/raw/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf" -OutFile "$FontDir\NotoSansSC.ttf" -ErrorAction Stop
+           # DejaVu Sans Mono (for code blocks)
+           Write-Host "Downloading DejaVu Sans Mono..."
+           Invoke-WebRequest -Uri "https://github.com/dejavu-fonts/dejavu-fonts/releases/download/version_2_37/dejavu-fonts-ttf-2.37.zip" -OutFile "$env:TEMP\dejavu.zip" -ErrorAction Stop
+           Expand-Archive -Path "$env:TEMP\dejavu.zip" -DestinationPath "$env:TEMP\dejavu" -Force
+           Copy-Item "$env:TEMP\dejavu\dejavu-fonts-ttf-2.37\ttf\DejaVuSansMono*.ttf" $FontDir
 
-          # Noto Serif SC (SimSun/FangSong fallback)
-          Write-Host "Downloading Noto Serif SC..."
-          Invoke-WebRequest -Uri "https://github.com/google/fonts/raw/main/ofl/notoserifsc/NotoSerifSC%5Bwght%5D.ttf" -OutFile "$FontDir\NotoSerifSC.ttf" -ErrorAction Stop
+           # Noto Sans CJK SC / Noto Serif CJK SC (fallbacks, static OTF)
+           Write-Host "Downloading Noto Sans CJK SC..."
+           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/08_NotoSansCJKsc.zip" -OutFile "$env:TEMP\noto-sans.zip" -ErrorAction Stop
+           Expand-Archive -Path "$env:TEMP\noto-sans.zip" -DestinationPath "$env:TEMP\noto-sans" -Force
+           Copy-Item "$env:TEMP\noto-sans\*.otf" $FontDir
+           Write-Host "Downloading Noto Serif CJK SC..."
+           Invoke-WebRequest -Uri "https://github.com/googlefonts/noto-cjk/releases/download/Serif2.001/09_NotoSerifCJKsc.zip" -OutFile "$env:TEMP\noto-serif.zip" -ErrorAction Stop
+           Expand-Archive -Path "$env:TEMP\noto-serif.zip" -DestinationPath "$env:TEMP\noto-serif" -Force
+           Copy-Item "$env:TEMP\noto-serif\*.otf" $FontDir
 
-          # Copy system Chinese fonts
-          Write-Host "Copying system Chinese fonts..."
-          $SysFontDir = "$env:SystemRoot\Fonts"
-          Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf","FangSong*.ttf","KaiTi*.ttf","Kaiti*.ttc" -ErrorAction SilentlyContinue |
-            Copy-Item -Destination $FontDir -Force
+           # ---------- system / actual MS Chinese fonts ----------
 
-          # If any missing, try Windows optional feature
-          $Missing = @("simsun.ttc","simhei.ttf","simfang.ttf","simkai.ttf") | Where-Object {
-            -not (Test-Path (Join-Path $FontDir $_))
-          }
-          if ($Missing.Count -gt 0) {
-            Write-Host "Missing: $($Missing -join ', '). Trying Chinese Supplemental Fonts..."
-            try {
-              $caps = Get-WindowsCapability -Online -Name "Language.Fonts.Chinese.Simplified~~*" -ErrorAction Stop
-              $cap = $caps | Select-Object -First 1
-              if ($cap -and $cap.State -ne "Installed") {
-                Add-WindowsCapability -Online -Name $cap.Name
-                Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
-                  Copy-Item -Destination $FontDir -Force
-              }
-            } catch {
-              Write-Host "Cannot install: $_"
-            }
-          }
+           # Try direct download of actual SimSun/SimHei/FangSong/KaiTi
+           $MSSource = "https://github.com/dolbydu/font/raw/master/unicode"
+           $MSFonts = @(
+             @{ File = "SimSun.ttc";  Name = "SimSun" },
+             @{ File = "SimHei.ttf";  Name = "SimHei" },
+             @{ File = "FangSong.ttf"; Name = "FangSong" },
+             @{ File = "KaiTi.ttf";   Name = "KaiTi" }
+           )
+           foreach ($f in $MSFonts) {
+             $dst = Join-Path $FontDir $f.File
+             if (-not (Test-Path $dst)) {
+               try {
+                 Invoke-WebRequest -Uri "$MSSource/$($f.File)" -OutFile $dst -ErrorAction Stop
+                 Write-Host "  [downloaded] $($f.Name)"
+               } catch {
+                 Write-Host "  [failed] $($f.Name): $_"
+               }
+             }
+           }
+
+           # Try system font directory
+           Write-Host "Copying system Chinese fonts..."
+           $SysFontDir = "$env:SystemRoot\Fonts"
+           Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf","FangSong*.ttf","KaiTi*.ttf","Kaiti*.ttc" -ErrorAction SilentlyContinue |
+             Copy-Item -Destination $FontDir -Force
+
+           # Try Windows optional feature as last resort
+           $Missing = @("simsun.ttc","simhei.ttf","simfang.ttf","simkai.ttf") | Where-Object {
+             -not (Test-Path (Join-Path $FontDir $_))
+           }
+           if ($Missing.Count -gt 0) {
+             Write-Host "Still missing: $($Missing -join ', '). Trying Windows Capability..."
+             try {
+               $caps = Get-WindowsCapability -Online -Name "Language.Fonts.Chinese.Simplified~~*" -ErrorAction Stop
+               $cap = $caps | Select-Object -First 1
+               if ($cap -and $cap.State -ne "Installed") {
+                 Add-WindowsCapability -Online -Name $cap.Name
+                 Get-ChildItem $SysFontDir -Include "simsun*.ttc","simhei*.ttf","simfang*.ttf","simkai*.ttf" -ErrorAction SilentlyContinue |
+                   Copy-Item -Destination $FontDir -Force
+               }
+             } catch {
+               Write-Host "Cannot install: $_"
+             }
+           }
 
           Write-Host "`nAvailable fonts:"
           Get-ChildItem $FontDir | ForEach-Object { Write-Host "  $($_.Name)" }
@@ -89,13 +115,11 @@ jobs:
       - name: Compile thesis.pdf (patch fonts if missing on runner)
         run: |
           FDIR="$HOME/fonts"
-          # Patch missing system fonts → Google Fonts alternatives
-          [ ! -f "$FDIR/simsun.ttc" ] && sed -i 's/"SimSun"/"Noto Serif SC"/g' fmt-req.typ && echo "patch: SimSun → Noto Serif SC"
-          [ ! -f "$FDIR/simhei.ttf" ] && sed -i 's/"SimHei"/"Noto Sans SC"/g' fmt-req.typ && echo "patch: SimHei → Noto Sans SC"
-          [ ! -f "$FDIR/simfang.ttf" ] && sed -i 's/"FangSong"/"Noto Serif SC"/g' fmt-req.typ && echo "patch: FangSong → Noto Serif SC"
-          [ ! -f "$FDIR/simkai.ttf" ] && sed -i 's/"Kaiti"/"Noto Sans SC"/g' fmt-req.typ && echo "patch: Kaiti → Noto Sans SC"
-          # Also replace the CodeFont CJK reference (Noto Sans CJK SC → Noto Sans SC)
-          grep -q '"Noto Sans CJK SC"' fmt-req.typ && sed -i 's/"Noto Sans CJK SC"/"Noto Sans SC"/g' fmt-req.typ && echo "patch: Noto Sans CJK SC → Noto Sans SC"
+          # Patch missing system fonts → Noto CJK SC alternatives
+          [ ! -f "$FDIR/simsun.ttc" ] && sed -i 's/"SimSun"/"Noto Serif CJK SC"/g' fmt-req.typ && echo "patch: SimSun → Noto Serif CJK SC"
+          [ ! -f "$FDIR/simhei.ttf" ] && sed -i 's/"SimHei"/"Noto Sans CJK SC"/g' fmt-req.typ && echo "patch: SimHei → Noto Sans CJK SC"
+          [ ! -f "$FDIR/simfang.ttf" ] && sed -i 's/"FangSong"/"Noto Serif CJK SC"/g' fmt-req.typ && echo "patch: FangSong → Noto Serif CJK SC"
+          [ ! -f "$FDIR/simkai.ttf" ] && sed -i 's/"Kaiti"/"Noto Sans CJK SC"/g' fmt-req.typ && echo "patch: Kaiti → Noto Sans CJK SC"
           echo "Compiling..."
           typst compile thesis.typ --font-path "$FDIR"
 
