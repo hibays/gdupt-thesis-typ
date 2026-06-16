@@ -1,9 +1,9 @@
 #import "@preview/modern-nju-thesis:0.4.1": bilingual-bibliography
 #import "@preview/modern-sjtu-thesis:0.6.1": (
-  algox, appendix, equate, i-figured, imagex, proof, pseudocode-list, show-theorion, subimagex, table-note, tablex,
-  theorem,
+  algox, appendix, i-figured, imagex, proof, pseudocode-list, show-theorion, subimagex, table-note, tablex, theorem,
 )
-#import "@preview/cjk-spacer:0.2.1": cjk-spacer
+#import "@preview/cjk-unbreak:0.2.3": remove-cjk-break-space
+#import "@preview/equate:0.3.3": equate
 #import "@preview/numbly:0.1.0": numbly
 #import "@preview/cuti:0.4.0": show-cn-fakebold, show-cn-fakeitalic, show-fakebold, show-fakeitalic
 #import "@preview/wordometer:0.1.5": utils as wordometer_utils
@@ -240,8 +240,8 @@
   show: show-cn-fakebold.with(stroke: 1em / 45)
   show: show-fakeitalic
 
-  // 用于改善排版CJK文字时字符间距的包
-  show: cjk-spacer
+  // https://typst.dev/guide/FAQ/chinese-remove-space.html
+  show: remove-cjk-break-space
 
   // 设置代码字体
   show raw: set text(
@@ -503,7 +503,7 @@
     专业 = block * 8
     班级 = block * 2
     学生 = block * 5
-    指导教师 = block * 3
+    指导教师 = block * 4
     职称 = block * 3
   }
   let underline-warpper = (it, extent: 0pt, offset: 0pt) => {
@@ -744,7 +744,7 @@
   v(1em)
 
   {
-    set text(size: 字号.三号, lang: "zh", font: TimeFanSun)
+    set text(size: 字号.三号, font: TimeFanSun)
     set par(leading: 31pt - 1em) // 行距
     set par(spacing: 31pt - 1em) // 段距
     set par(justify: true) // 设置段落两端对齐
@@ -863,7 +863,7 @@
 
   if 英文摘要 != none {
     twoside-section-pagebreak()
-    [
+    text(lang: "en", costs: (hyphenation: 50%))[
       #heading(level: 1)[Abstract]
       #v(-0.4em)
       #英文摘要
@@ -888,9 +888,15 @@
   twoside-section-pagebreak()
 
   show bibliography: set text(font: TimeSimSun, size: 字号.五号) // 五号宋体
-  // HACK: 参考文献的行间距是魔法值
+
   show bibliography: set par(leading: 23pt - 1em) // 行距
   show bibliography: set par(spacing: 23.9pt - 1em) // 段距
+  show bibliography: it => {
+    // HACK: enabling hyphenate in eng bib entry requires lang = en
+    // When hyphenate auto, text will be hyphenated if and only if justification is enabled.
+    set text(lang: "en", costs: (hyphenation: 50%))
+    it
+  }
 
   {
     set heading(supplement: [引文])
