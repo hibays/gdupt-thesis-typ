@@ -358,6 +358,8 @@
       )
     },
   )
+  // 重置页码编号和空白页计数
+  counter(page).update(1)
   _empty-page-counter.update(0)
 
   it
